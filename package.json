@@ -1,0 +1,9 @@
+{
+  "name": "blog",
+  "private": true,
+  "scripts": {
+    "dev": "npm run dev --prefix blog-app",
+    "build": "npm run build --prefix blog-app",
+    "preview": "npm run preview --prefix blog-app"
+  }
+}
