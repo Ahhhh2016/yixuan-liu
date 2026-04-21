@@ -76,20 +76,9 @@ export default function RainyMountainPortfolio() {
           <div className="mx-auto h-full w-[72%] rounded-full bg-white/55" />
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 h-[54vh] opacity-75">
-          <div className="absolute bottom-0 left-[-6%] h-[40vh] w-[32%] rounded-t-[100%] bg-[#AFC2D3]/45 blur-sm" />
-          <div className="absolute bottom-0 left-[16%] h-[52vh] w-[26%] rounded-t-[100%] bg-[#92ABC0]/38 blur-sm" />
-          <div className="absolute bottom-0 left-[35%] h-[34vh] w-[24%] rounded-t-[100%] bg-[#7996AF]/32 blur-sm" />
-          <div className="absolute bottom-0 right-[26%] h-[58vh] w-[22%] rounded-t-[100%] bg-[#7C96AB]/40 blur-sm" />
-          <div className="absolute bottom-0 right-[6%] h-[48vh] w-[26%] rounded-t-[100%] bg-[#5E7790]/42 blur-sm" />
-        </div>
-
-        <svg viewBox="0 0 1440 900" className="absolute inset-0 h-full w-full opacity-[0.16] mix-blend-multiply">
-          <path d="M1100 140C1180 210 1240 250 1320 300C1240 320 1170 380 1140 450C1090 390 1030 350 930 320C1025 280 1070 220 1100 140Z" fill="#3E5F78" />
-          <path d="M1080 165C1160 220 1205 248 1265 286" stroke="#1E2328" strokeWidth="8" fill="none" strokeLinecap="round" />
-          <path d="M1035 295C940 325 865 390 820 500" stroke="#1E2328" strokeWidth="7" fill="none" strokeLinecap="round" opacity="0.8" />
-          <path d="M990 285C900 318 828 378 775 470" stroke="#3E5F78" strokeWidth="4" fill="none" strokeLinecap="round" opacity="0.85" />
-        </svg>
+        <div className="absolute bottom-0 left-0 right-0 h-[58vh] opacity-55 blur-[2px] bg-[linear-gradient(to_top,#AFC2D3_0%,rgba(175,194,211,0)_100%)]" />
+        <div className="absolute bottom-0 left-0 right-0 h-[46vh] opacity-70 blur-[1px] bg-[linear-gradient(to_top,#7C96AB_0%,rgba(124,150,171,0)_100%)]" />
+        <div className="absolute bottom-0 left-0 right-0 h-[32vh] opacity-85 bg-[linear-gradient(to_top,#5E7790_0%,rgba(94,119,144,0)_100%)]" />
 
         {Array.from({ length: 54 }).map((_, i) => (
           <span
