@@ -116,17 +116,17 @@ export default function RainyMountainPortfolio() {
       </header>
 
       <main className="relative z-10">
-        <section id="home" className="mx-auto grid min-h-[88vh] max-w-7xl items-center gap-10 px-6 pb-16 pt-8 md:grid-cols-[1.15fr_0.85fr] md:px-10 md:pb-24 md:pt-14">
+        <section id="home" className="mx-auto w-full min-h-[88vh] max-w-7xl px-6 pb-16 pt-8 md:px-10 md:pb-24 md:pt-14">
           <div>
             <div className="mb-5 inline-flex items-center gap-3 rounded-full border border-[#1E7FBF]/10 bg-white/45 px-4 py-2 backdrop-blur-sm">
               <span className="h-2 w-2 rounded-full bg-[#5BAEE6]" />
-              <span className="text-xs uppercase tracking-[0.24em] text-[#3A4653]">Rain over Mountains</span>
+              <span className="text-xs uppercase tracking-[0.24em] text-[#3A4653]">点击这里切换到中文</span>
             </div>
-            <h1 className="max-w-3xl text-5xl font-semibold leading-[1.02] tracking-[-0.04em] text-[#1E2328] md:text-7xl">
-              A portfolio where code falls like rain
-              <span className="block text-[#1E7FBF]">through ink-wash mountains.</span>
+            <h1 className="w-full max-w-none text-5xl font-semibold leading-[1.02] tracking-[-0.04em] text-[#1E2328] md:text-7xl">
+              Hi. Welcome.
+              <span className="block text-[#1E7FBF]">I'm Yixuan Liu, who learns computer graphics, AI, and builds applications.</span>
             </h1>
-            <p className="mt-6 max-w-2xl text-base leading-8 text-[#3A4653] md:text-lg">
+            <p className="mt-6 w-full max-w-none text-base leading-8 text-[#3A4653] md:text-lg">
               Computer graphics, AI, and reflective technical writing presented in a calm East-Asian visual language: mist, paper, mountains, water, and motion that feels like weather.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
@@ -136,41 +136,6 @@ export default function RainyMountainPortfolio() {
               <a href="#about" className="rounded-full border border-[#1E2328]/10 bg-white/50 px-6 py-3 text-sm text-[#1E2328] backdrop-blur-sm transition hover:bg-white/70">
                 Read the artist statement
               </a>
-            </div>
-          </div>
-
-          <div className="relative flex items-center justify-center md:justify-end">
-            <div className="relative w-full max-w-md rounded-[28px] border border-[#1E2328]/8 bg-white/42 p-5 shadow-[0_18px_60px_rgba(40,55,70,0.08)] backdrop-blur-md">
-              <div className="rounded-[24px] border border-[#1E2328]/8 bg-[#F4FAFE]/80 p-6">
-                <div className="text-xs uppercase tracking-[0.26em] text-[#5BAEE6]">Current Atmosphere</div>
-                <div className="mt-5 space-y-4">
-                  {[
-                    ['Weather', 'Light rain / low mist'],
-                    ['Focus', 'Graphics · AI · Writing'],
-                    ['Mood', 'Quiet, precise, poetic'],
-                  ].map(([k, v]) => (
-                    <div key={k} className="flex items-center justify-between border-b border-[#1E2328]/6 pb-3 text-sm">
-                      <span className="text-[#3A4653]">{k}</span>
-                      <span className="text-[#1E2328]">{v}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-6 h-32 rounded-[22px] bg-[linear-gradient(180deg,rgba(189,224,247,0.22),rgba(245,246,244,0.9))] p-4">
-                  <div className="relative h-full w-full overflow-hidden rounded-[18px]">
-                    <div className="absolute bottom-0 left-[-2%] h-16 w-28 rounded-t-[100%] bg-[#BDE0F7]/60" />
-                    <div className="absolute bottom-0 left-[20%] h-24 w-24 rounded-t-[100%] bg-[#6FB8E5]/45" />
-                    <div className="absolute bottom-0 left-[42%] h-14 w-24 rounded-t-[100%] bg-[#2E7AB0]/45" />
-                    <div className="absolute bottom-0 right-[14%] h-28 w-24 rounded-t-[100%] bg-[#8CC7EC]/55" />
-                    {Array.from({ length: 10 }).map((_, i) => (
-                      <span
-                        key={i}
-                        className="absolute top-0 w-px bg-[#4B97CD]/35"
-                        style={{ left: `${8 + i * 9}%`, height: '18px', animation: `rainFall ${1.8 + i * 0.1}s linear ${i * 0.18}s infinite` }}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </section>

@@ -131,11 +131,11 @@ export default function RainyMountainPortfolio() {
           <div>
             <div className="mb-5 inline-flex items-center gap-3 rounded-full border border-[#3E5F78]/10 bg-white/45 px-4 py-2 backdrop-blur-sm">
               <span className="h-2 w-2 rounded-full bg-[#6E8FA7]" />
-              <span className="text-xs uppercase tracking-[0.24em] text-[#3A4653]">Rain over Mountains</span>
+              <span className="text-xs uppercase tracking-[0.24em] text-[#3A4653]">点击这里切换到中文</span>
             </div>
             <h1 className="max-w-3xl text-5xl font-semibold leading-[1.02] tracking-[-0.04em] text-[#1E2328] md:text-7xl">
-              A portfolio where code falls like rain
-              <span className="block text-[#3E5F78]">through ink-wash mountains.</span>
+              Hi. Welcome.
+              <span className="block text-[#3E5F78]">I'm Yixuan Liu, who learns computer graphics, AI, and builds applications.</span>
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-8 text-[#3A4653] md:text-lg">
               Computer graphics, AI, and reflective technical writing presented in a calm East-Asian visual language: mist, paper, mountains, water, and motion that feels like weather.
