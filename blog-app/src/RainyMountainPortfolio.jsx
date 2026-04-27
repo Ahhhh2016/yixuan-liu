@@ -3,9 +3,11 @@ import { NOTEBOOK_ASCII } from './notebookAscii.js';
 import { UTAH_TEAPOT_ASCII } from './utahTeapotAscii.js';
 import { SCROLL_ASCII } from './scrollAscii.js';
 import { PHONOGRAPH_ASCII } from './phonographAscii.js';
+import { useEffect, useMemo, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { BrowserRouter, Link, Navigate, Route, Routes, useParams } from 'react-router-dom';
 import { getProjectBySlug } from './projectContent.js';
+import { getTutorialBySlug, tutorialDetails } from './tutorialContent.js';
 
 const nav = [
   { label: 'Home', path: '/' },
@@ -60,6 +62,29 @@ const blogs = [
     "Field journals from graphics, AI, and product experiments.",
     "Long-form reflections written like essays on rain-washed paper.",
   ];
+
+const tutorials = tutorialDetails.length
+  ? tutorialDetails
+  : [
+      {
+        title: 'Path Tracer Tutorial',
+        slug: 'path-tracer-tutorial',
+        meta: 'Rendering · BRDF · Global Illumination',
+        summary: 'Build a minimal but extensible path tracer from camera rays to indirect lighting.',
+      },
+      {
+        title: 'Shading Basics Tutorial',
+        slug: 'shading-basics',
+        meta: 'Geometry · Shading · Simulation',
+        summary: 'A practical walkthrough of core shading models and how to compare them visually.',
+      },
+      {
+        title: 'Realtime WebGL Pipeline Tutorial',
+        slug: 'realtime-webgl-pipeline',
+        meta: 'Realtime Graphics · Web Visuals',
+        summary: 'Organize a clean realtime rendering pipeline for browser-based graphics projects.',
+      },
+    ];
 
 const asciiCardsRaw = [
     {
@@ -273,13 +298,17 @@ function GraphicsTutorialsPage() {
         <h2 className="mt-3 text-3xl font-semibold tracking-[-0.03em] md:text-5xl">Step-by-step graphics notes.</h2>
       </div>
       <div className="grid gap-6 md:grid-cols-3">
-        {graphics.map((item, i) => (
-          <article key={item.title} className="rounded-[28px] border border-[#1E2328]/8 bg-white/60 p-6 shadow-[0_16px_50px_rgba(40,55,70,0.05)] backdrop-blur-sm">
+        {tutorials.map((item, i) => (
+          <Link
+            key={item.title}
+            to={`/graphics-tutorials/${item.slug}`}
+            className="block rounded-[28px] border border-[#1E2328]/8 bg-white/60 p-6 shadow-[0_16px_50px_rgba(40,55,70,0.05)] backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:bg-white/72 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E7FBF]/45"
+          >
             <div className="text-xs uppercase tracking-[0.22em] text-[#5BAEE6]">Tutorial 0{i + 1}</div>
             <h3 className="mt-3 text-2xl tracking-[-0.03em]">{item.title}</h3>
             <p className="mt-2 text-sm text-[#1E7FBF]">{item.meta}</p>
-            <p className="mt-4 text-sm leading-7 text-[#3A4653]">Guided walkthrough format for this topic, with implementation notes and visuals.</p>
-          </article>
+            <p className="mt-4 text-sm leading-7 text-[#3A4653]">{item.summary || 'Guided walkthrough format for this topic.'}</p>
+          </Link>
         ))}
       </div>
     </section>
@@ -378,6 +407,161 @@ function ProjectDetailPage() {
   );
 }
 
+function slugifyHeading(text) {
+  return text
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-');
+}
+
+function extractToc(content) {
+  return content
+    .split('\n')
+    .filter((line) => /^##\s+/.test(line))
+    .map((line) => {
+      const title = line.replace(/^##\s+/, '').trim();
+      return { title, id: slugifyHeading(title) };
+    });
+}
+
+function flattenMarkdownText(children) {
+  if (typeof children === 'string') {
+    return children;
+  }
+  if (typeof children === 'number') {
+    return String(children);
+  }
+  if (Array.isArray(children)) {
+    return children.map(flattenMarkdownText).join('');
+  }
+  if (children && typeof children === 'object' && 'props' in children) {
+    return flattenMarkdownText(children.props.children);
+  }
+  return '';
+}
+
+function GraphicsTutorialDetailPage() {
+  const { slug } = useParams();
+  const tutorial = slug ? getTutorialBySlug(slug) : null;
+  const toc = useMemo(() => (tutorial ? extractToc(tutorial.content) : []), [tutorial]);
+  const [activeSectionId, setActiveSectionId] = useState('');
+  const highlightedSectionId = activeSectionId || toc[0]?.id || '';
+
+  useEffect(() => {
+    if (!toc.length) {
+      return undefined;
+    }
+
+    const observed = toc
+      .map((item) => document.getElementById(item.id))
+      .filter(Boolean);
+
+    if (!observed.length) {
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (visible[0]?.target?.id) {
+          setActiveSectionId(visible[0].target.id);
+        }
+      },
+      { rootMargin: '-20% 0px -65% 0px', threshold: [0, 1] }
+    );
+
+    observed.forEach((element) => observer.observe(element));
+    return () => observer.disconnect();
+  }, [toc, slug]);
+
+  if (!tutorial) {
+    return <Navigate to="/graphics-tutorials" replace />;
+  }
+
+  return (
+    <section className="mx-auto max-w-7xl px-6 py-16 md:px-10 md:py-24">
+      <Link
+        to="/graphics-tutorials"
+        className="inline-block text-sm tracking-wide text-[#1E7FBF] transition-colors hover:text-[#0f5f96]"
+      >
+        ← Back to Graphics Tutorials
+      </Link>
+      <div className="mt-6 grid gap-8 rounded-[30px] border border-[#1E2328]/8 bg-white/60 p-6 shadow-[0_18px_60px_rgba(40,55,70,0.06)] backdrop-blur-sm md:grid-cols-[260px_minmax(0,1fr)] md:p-8">
+        <aside className="md:sticky md:top-8 md:self-start">
+          <div className="text-xs uppercase tracking-[0.24em] text-[#5BAEE6]">教程目录</div>
+          <nav className="mt-4 space-y-2">
+            {tutorials.map((entry) => {
+              const isCurrentArticle = entry.slug === tutorial.slug;
+              return (
+                <div key={entry.slug} className="rounded-lg">
+                  <Link
+                    to={`/graphics-tutorials/${entry.slug}`}
+                    className={`block rounded-lg px-2 py-1 text-sm leading-6 transition-colors ${
+                      isCurrentArticle ? 'bg-[#E8F3FB] font-medium text-[#1E7FBF]' : 'text-[#3A4653] hover:text-[#1E7FBF]'
+                    }`}
+                  >
+                    {entry.title}
+                  </Link>
+
+                  {isCurrentArticle && (
+                    <div className="mt-1 ml-3 border-l border-[#1E7FBF]/20 pl-3">
+                      {toc.map((item) => {
+                        const isActiveSection = item.id === highlightedSectionId;
+                        return (
+                          <a
+                            key={item.id}
+                            href={`#${item.id}`}
+                            onClick={() => setActiveSectionId(item.id)}
+                            className={`block rounded px-2 py-1 text-sm leading-6 transition-colors ${
+                              isActiveSection ? 'bg-[#E8F3FB] text-[#1E7FBF]' : 'text-[#3A4653] hover:text-[#1E7FBF]'
+                            }`}
+                          >
+                            {item.title}
+                          </a>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </nav>
+        </aside>
+
+        <article className="min-w-0">
+          <div className="text-xs uppercase tracking-[0.28em] text-[#5BAEE6]">Graphics Tutorial</div>
+          <h1 className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-[#1E2328] md:text-5xl">{tutorial.title}</h1>
+          {tutorial.meta && <p className="mt-3 text-sm text-[#1E7FBF]">{tutorial.meta}</p>}
+          {tutorial.date && <p className="mt-1 text-xs uppercase tracking-[0.18em] text-[#3A4653]">{tutorial.date}</p>}
+          {tutorial.summary && <p className="mt-6 text-base leading-8 text-[#3A4653]">{tutorial.summary}</p>}
+
+          <div className="mt-8">
+            <ReactMarkdown
+              components={{
+                ...markdownComponents,
+                h2: ({ children }) => {
+                  const headingText = flattenMarkdownText(children);
+                  const id = slugifyHeading(headingText);
+                  return (
+                    <h2 id={id} className="mt-8 scroll-mt-24 text-2xl font-semibold tracking-[-0.02em] text-[#1E2328] md:text-3xl">
+                      {children}
+                    </h2>
+                  );
+                },
+              }}
+            >
+              {tutorial.content}
+            </ReactMarkdown>
+          </div>
+        </article>
+      </div>
+    </section>
+  );
+}
+
 function PortfolioLayout() {
   return (
     <div className="min-h-screen bg-[#EEF6FD] text-[#1E2328] overflow-hidden selection:bg-[#5BAEE6]/25">
@@ -458,6 +642,7 @@ function PortfolioLayout() {
           <Route path="/projects/:slug" element={<ProjectDetailPage />} />
           <Route path="/tech-blogs" element={<TechBlogsPage />} />
           <Route path="/graphics-tutorials" element={<GraphicsTutorialsPage />} />
+          <Route path="/graphics-tutorials/:slug" element={<GraphicsTutorialDetailPage />} />
           <Route path="/novels" element={<NovelsPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="*" element={<HomePage />} />
