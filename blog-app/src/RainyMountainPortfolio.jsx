@@ -12,7 +12,6 @@ import { createComment, createProfile, getProfile, listComments } from './commen
 import { isSupabaseConfigured, supabase } from './supabaseClient.js';
 
 const nav = [
-  { label: 'Home', path: '/' },
   { label: 'Projects', path: '/projects' },
   { label: 'Tech blogs', path: '/tech-blogs' },
   { label: 'Graphics Tutorials', path: '/graphics-tutorials' },
@@ -127,7 +126,13 @@ const asciiCardsRaw = [
   ];
 
 const sizeTuning = {
-  computer: 0.82,
+  computer: 1.00,
+};
+
+const verticalScaleTuning = {
+  computer: 0.66,
+  scroll: 0.66,
+  teapot: 0.55,
 };
 
 const asciiCards = asciiCardsRaw.map((card) => {
@@ -139,7 +144,8 @@ const asciiCards = asciiCardsRaw.map((card) => {
   const fontSizePx = Math.max(3.2, Math.min(7.2, Math.min(600 / (cols * 0.82), 180 / (rows * 0.82))));
 
   const tunedFontSizePx = fontSizePx * (sizeTuning[card.key] ?? 1);
-  return { ...card, fontSizePx: tunedFontSizePx };
+  const verticalScale = verticalScaleTuning[card.key] ?? 0.75;
+  return { ...card, fontSizePx: tunedFontSizePx, verticalScale };
 });
 
 const markdownComponents = {
@@ -567,7 +573,7 @@ function HomePage() {
             <div className="flex h-[178px] items-center justify-center overflow-hidden">
               <pre
                 className="m-0 block origin-center whitespace-pre font-mono leading-[1.04] text-[#1E2328] transition-colors duration-300 group-hover:text-white group-focus-visible:text-white [font-variant-ligatures:none]"
-                style={{ fontSize: `${card.fontSizePx}px`, transform: 'scaleY(0.75)' }}
+                style={{ fontSize: `${card.fontSizePx}px`, transform: `scaleY(${card.verticalScale})` }}
               >
                 {card.ascii}
               </pre>
@@ -1006,7 +1012,12 @@ function PortfolioLayout() {
 
       <header className="relative z-10">
         <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6 md:px-10">
-          <div className="text-sm tracking-[0.25em] text-[#3A4653] uppercase">Yixuan Liu</div>
+          <Link
+            to="/"
+            className="text-sm tracking-[0.25em] text-[#3A4653] uppercase transition-colors hover:text-[#1E2328]"
+          >
+            Yixuan Liu
+          </Link>
           <div className="hidden gap-8 md:flex">
             {nav.map((item) => (
               <Link
