@@ -550,7 +550,7 @@ function HomePage() {
           <span className="h-2 w-2 rounded-full bg-[#5BAEE6]" />
           <span className="text-xs uppercase tracking-[0.24em] text-[#3A4653]">点击这里切换到中文</span>
         </div>
-        <h1 className="w-full max-w-none text-5xl font-semibold leading-[1.02] tracking-[-0.04em] text-[#1E2328] md:text-7xl">
+        <h1 className="w-full max-w-none text-5xl font-extrabold leading-[1.02] tracking-[-0.04em] text-[#1E2328] md:text-7xl">
           Hi. Welcome.
           <span className="block text-[#1E7FBF]">I'm Yixuan Liu, who learns computer graphics, AI, and builds applications.</span>
         </h1>
