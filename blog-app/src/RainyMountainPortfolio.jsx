@@ -1,3 +1,9 @@
+import { COMPUTER_ASCII } from './computerAscii.js';
+import { NOTEBOOK_ASCII } from './notebookAscii.js';
+import { UTAH_TEAPOT_ASCII } from './utahTeapotAscii.js';
+import { SCROLL_ASCII } from './scrollAscii.js';
+import { PHONOGRAPH_ASCII } from './phonographAscii.js';
+
 export default function RainyMountainPortfolio() {
   const nav = ["Home", "Graphics Projects", "AI Projects", "Blogs", "About"];
 
@@ -42,6 +48,66 @@ export default function RainyMountainPortfolio() {
     "Field journals from graphics, AI, and product experiments.",
     "Long-form reflections written like essays on rain-washed paper.",
   ];
+
+  const asciiCardsRaw = [
+    {
+      key: 'computer',
+      ascii: COMPUTER_ASCII,
+      href: '#graphics-projects',
+      title: 'Projects',
+      subtitle: 'computer',
+    },
+    {
+      key: 'notebook',
+      ascii: NOTEBOOK_ASCII,
+      href: '#blogs',
+      title: 'Tech Blogs',
+      subtitle: 'notebook',
+    },
+    {
+      key: 'teapot',
+      ascii: UTAH_TEAPOT_ASCII,
+      href: '#graphics-projects',
+      title: 'Graphics Tutorials',
+      subtitle: 'teapot',
+    },
+    {
+      key: 'scroll',
+      ascii: SCROLL_ASCII,
+      href: '#blogs',
+      title: 'Novels',
+      subtitle: 'scroll',
+    },
+    {
+      key: 'phonograph',
+      ascii: PHONOGRAPH_ASCII,
+      href: '#about',
+      title: 'About',
+      subtitle: 'phonograph',
+    },
+  ];
+
+  const sizeTuning = {
+    computer: 0.82,
+  };
+
+  const asciiCards = asciiCardsRaw.map((card) => {
+    const lines = card.ascii.split('\n');
+    const cols = Math.max(...lines.map((line) => line.length));
+    const rows = lines.length;
+
+    // Approximate monospace glyph ratio to keep all ASCII cards similarly sized.
+    const fontSizePx = Math.max(
+      3.2,
+      Math.min(
+        7.2,
+        Math.min(600 / (cols * 0.82), 180 / (rows * 0.82))
+      )
+    );
+
+    const tunedFontSizePx = fontSizePx * (sizeTuning[card.key] ?? 1);
+    return { ...card, fontSizePx: tunedFontSizePx };
+  });
 
   return (
     <div className="min-h-screen bg-[#EEF6FD] text-[#1E2328] overflow-hidden selection:bg-[#5BAEE6]/25">
@@ -137,6 +203,33 @@ export default function RainyMountainPortfolio() {
                 Read the artist statement
               </a>
             </div>
+          </div>
+
+          <div className="mt-14 flex gap-5 overflow-x-auto pb-2">
+            {asciiCards.map((card) => (
+              <a
+                key={card.key}
+                href={card.href}
+                aria-label={`Go to ${card.title}`}
+                className="group relative w-[360px] shrink-0 overflow-hidden rounded-[24px] border border-[#1E2328]/10 bg-transparent p-4 transition duration-300 hover:-translate-y-1 hover:bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E7FBF]/45"
+              >
+                <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0)_36%,rgba(30,35,40,0.62)_100%)] opacity-75 transition-opacity duration-300 md:opacity-0 md:group-hover:opacity-100 md:group-focus-visible:opacity-100" />
+
+                <div className="flex h-[210px] items-center justify-center overflow-hidden">
+                  <pre
+                    className="m-0 whitespace-pre font-mono leading-[1.04] text-[#1E2328] [font-variant-ligatures:none]"
+                    style={{ fontSize: `${card.fontSizePx}px` }}
+                  >
+                    {card.ascii}
+                  </pre>
+                </div>
+
+                <div className="absolute inset-x-0 bottom-0 p-4 text-[#EEF6FD] transition-all duration-300 md:translate-y-2 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100 md:group-focus-visible:translate-y-0 md:group-focus-visible:opacity-100">
+                  <div className="text-[10px] uppercase tracking-[0.22em] text-[#BDE0F7]">{card.subtitle}</div>
+                  <div className="mt-1 text-base font-medium tracking-wide">{card.title}</div>
+                </div>
+              </a>
+            ))}
           </div>
         </section>
 
