@@ -213,10 +213,10 @@ export default function RainyMountainPortfolio() {
                 aria-label={`Go to ${card.title}`}
                 className="group relative min-w-0 overflow-hidden rounded-[24px] bg-transparent p-3 transition duration-300 hover:-translate-y-1 hover:bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E7FBF]/45 md:p-4"
               >
-                <div className="flex h-[210px] items-center justify-center overflow-hidden">
+                <div className="flex h-[178px] items-center justify-center overflow-hidden">
                   <pre
-                    className="m-0 whitespace-pre font-mono leading-[1.04] text-[#1E2328] transition-colors duration-300 group-hover:text-white group-focus-visible:text-white [font-variant-ligatures:none]"
-                    style={{ fontSize: `${card.fontSizePx}px` }}
+                    className="m-0 block origin-center whitespace-pre font-mono leading-[1.04] text-[#1E2328] transition-colors duration-300 group-hover:text-white group-focus-visible:text-white [font-variant-ligatures:none]"
+                    style={{ fontSize: `${card.fontSizePx}px`, transform: 'scaleY(0.75)' }}
                   >
                     {card.ascii}
                   </pre>
