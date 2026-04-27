@@ -182,7 +182,7 @@ export default function RainyMountainPortfolio() {
       </header>
 
       <main className="relative z-10">
-        <section id="home" className="mx-auto w-full min-h-[88vh] max-w-7xl px-6 pb-16 pt-8 md:px-10 md:pb-24 md:pt-14">
+        <section id="home" className="mx-auto flex min-h-[88vh] w-full max-w-7xl flex-col justify-center px-6 py-8 md:px-10 md:py-10">
           <div>
             <div className="mb-5 inline-flex items-center gap-3 rounded-full border border-[#1E7FBF]/10 bg-white/45 px-4 py-2 backdrop-blur-sm">
               <span className="h-2 w-2 rounded-full bg-[#5BAEE6]" />
@@ -192,17 +192,6 @@ export default function RainyMountainPortfolio() {
               Hi. Welcome.
               <span className="block text-[#1E7FBF]">I'm Yixuan Liu, who learns computer graphics, AI, and builds applications.</span>
             </h1>
-            <p className="mt-6 w-full max-w-none text-base leading-8 text-[#3A4653] md:text-lg">
-              Computer graphics, AI, and reflective technical writing presented in a calm East-Asian visual language: mist, paper, mountains, water, and motion that feels like weather.
-            </p>
-            <div className="mt-10 flex flex-wrap gap-4">
-              <a href="#graphics-projects" className="rounded-full bg-[#1E2328] px-6 py-3 text-sm text-[#EEF6FD] shadow-[0_12px_40px_rgba(30,35,40,0.12)] transition hover:-translate-y-0.5">
-                Enter the mountains
-              </a>
-              <a href="#about" className="rounded-full border border-[#1E2328]/10 bg-white/50 px-6 py-3 text-sm text-[#1E2328] backdrop-blur-sm transition hover:bg-white/70">
-                Read the artist statement
-              </a>
-            </div>
           </div>
 
           <div className="mt-14 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
