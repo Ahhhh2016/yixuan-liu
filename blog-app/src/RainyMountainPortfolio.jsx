@@ -8,6 +8,8 @@ import ReactMarkdown from 'react-markdown';
 import { BrowserRouter, Link, Navigate, Route, Routes, useParams } from 'react-router-dom';
 import { getProjectBySlug } from './projectContent.js';
 import { getTutorialBySlug, tutorialDetails } from './tutorialContent.js';
+import { createComment, createProfile, getProfile, listComments } from './commentApi.js';
+import { isSupabaseConfigured, supabase } from './supabaseClient.js';
 
 const nav = [
   { label: 'Home', path: '/' },
@@ -156,6 +158,389 @@ const markdownComponents = {
       <code className="block overflow-x-auto rounded-2xl bg-[#E8F3FB] p-4 text-sm text-[#1E2328]">{children}</code>
     ),
 };
+
+function buildCommentTree(flatComments) {
+  const byId = new Map();
+  const roots = [];
+
+  flatComments.forEach((item) => {
+    byId.set(item.id, { ...item, replies: [] });
+  });
+
+  flatComments.forEach((item) => {
+    const current = byId.get(item.id);
+    if (item.parentId && byId.has(item.parentId)) {
+      byId.get(item.parentId).replies.push(current);
+    } else {
+      roots.push(current);
+    }
+  });
+
+  return roots;
+}
+
+function CommentsSection({ contentType, slug }) {
+  const [session, setSession] = useState(null);
+  const [profile, setProfile] = useState(null);
+  const [comments, setComments] = useState([]);
+  const [isLoading, setIsLoading] = useState(() => isSupabaseConfigured);
+  const [isSendingLink, setIsSendingLink] = useState(false);
+  const [isCreatingProfile, setIsCreatingProfile] = useState(false);
+  const [isPosting, setIsPosting] = useState(false);
+  const [loginEmail, setLoginEmail] = useState('');
+  const [pendingUsername, setPendingUsername] = useState('');
+  const [message, setMessage] = useState('');
+  const [activeReplyId, setActiveReplyId] = useState('');
+  const [replyMessage, setReplyMessage] = useState('');
+  const [error, setError] = useState('');
+  const [hint, setHint] = useState('');
+
+  async function refreshComments() {
+    const rows = await listComments(contentType, slug);
+    setComments(buildCommentTree(rows));
+  }
+
+  async function refreshProfile(userId) {
+    const current = await getProfile(userId);
+    setProfile(current);
+  }
+
+  useEffect(() => {
+    if (!isSupabaseConfigured || !supabase) {
+      return undefined;
+    }
+
+    let mounted = true;
+
+    async function init() {
+      setIsLoading(true);
+      setError('');
+      setHint('');
+      setActiveReplyId('');
+      setReplyMessage('');
+
+      const [{ data: sessionData }, commentsResult] = await Promise.all([
+        supabase.auth.getSession(),
+        listComments(contentType, slug),
+      ]);
+
+      if (!mounted) {
+        return;
+      }
+
+      setSession(sessionData.session);
+      setComments(buildCommentTree(commentsResult));
+
+      if (sessionData.session?.user?.id) {
+        try {
+          const current = await getProfile(sessionData.session.user.id);
+          if (mounted) {
+            setProfile(current);
+            if (current?.username) {
+              setPendingUsername(current.username);
+            }
+          }
+        } catch (profileError) {
+          if (mounted) {
+            setError(profileError.message || '读取用户名失败，请稍后重试。');
+          }
+        }
+      } else {
+        setProfile(null);
+      }
+
+      if (mounted) {
+        setIsLoading(false);
+      }
+    }
+
+    init().catch((initError) => {
+      if (mounted) {
+        setError(initError.message || '初始化评论失败，请刷新重试。');
+        setIsLoading(false);
+      }
+    });
+
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      setSession(nextSession);
+      if (!nextSession?.user?.id) {
+        setProfile(null);
+        return;
+      }
+      refreshProfile(nextSession.user.id).catch((profileError) => {
+        setError(profileError.message || '读取用户名失败，请稍后重试。');
+      });
+    });
+
+    return () => {
+      mounted = false;
+      authListener.subscription.unsubscribe();
+    };
+  }, [contentType, slug]);
+
+  async function handleSendMagicLink(event) {
+    event.preventDefault();
+    const email = loginEmail.trim().toLowerCase();
+    if (!email) {
+      setError('请填写邮箱。');
+      return;
+    }
+
+    setIsSendingLink(true);
+    setError('');
+    setHint('');
+    try {
+      const { error: sendError } = await supabase.auth.signInWithOtp({
+        email,
+        options: { emailRedirectTo: window.location.href },
+      });
+      if (sendError) {
+        throw sendError;
+      }
+      setHint('登录链接已发送，请去邮箱点击链接完成登录。');
+    } catch (sendError) {
+      setError(sendError.message || '发送登录链接失败。');
+    } finally {
+      setIsSendingLink(false);
+    }
+  }
+
+  async function handleCreateProfile(event) {
+    event.preventDefault();
+    if (!session?.user?.id) {
+      return;
+    }
+
+    const username = pendingUsername.trim();
+    if (!username) {
+      setError('请先设置用户名。');
+      return;
+    }
+
+    setIsCreatingProfile(true);
+    setError('');
+    try {
+      const created = await createProfile(session.user.id, username);
+      setProfile(created);
+      setHint('用户名设置完成，可以发表评论了。');
+    } catch (profileError) {
+      if (profileError.code === '23505') {
+        setError('该用户名已被占用，请换一个。');
+      } else {
+        setError(profileError.message || '保存用户名失败。');
+      }
+    } finally {
+      setIsCreatingProfile(false);
+    }
+  }
+
+  async function handleCreateComment(event, parentId = null) {
+    event.preventDefault();
+    if (!profile?.username) {
+      setError('请先完成登录并设置用户名。');
+      return;
+    }
+
+    const content = (parentId ? replyMessage : message).trim();
+    if (!content) {
+      setError(parentId ? '回复内容不能为空。' : '评论内容不能为空。');
+      return;
+    }
+
+    setIsPosting(true);
+    setError('');
+    try {
+      await createComment({
+        contentType,
+        contentSlug: slug,
+        username: profile.username,
+        message: content,
+        parentId,
+      });
+      await refreshComments();
+      if (parentId) {
+        setReplyMessage('');
+        setActiveReplyId('');
+      } else {
+        setMessage('');
+      }
+    } catch (postError) {
+      setError(postError.message || '发表评论失败，请稍后重试。');
+    } finally {
+      setIsPosting(false);
+    }
+  }
+
+  async function handleLogout() {
+    if (!supabase) {
+      return;
+    }
+    await supabase.auth.signOut();
+    setHint('已退出登录。');
+  }
+
+  return (
+    <section className="mt-10 rounded-[24px] border border-[#1E2328]/8 bg-white/65 p-6 shadow-[0_12px_40px_rgba(40,55,70,0.05)]">
+      <h2 className="text-xl font-semibold tracking-[-0.02em] text-[#1E2328]">评论</h2>
+      <p className="mt-2 text-sm text-[#3A4653]">支持评论与回复。登录后即可发布，用户名全站唯一。</p>
+
+      {!isSupabaseConfigured && (
+        <div className="mt-5 rounded-xl border border-[#e0b7b7] bg-[#fff3f3] px-4 py-3 text-sm text-[#9a3f3f]">
+          未检测到 Supabase 配置，请先设置 `VITE_SUPABASE_URL` 和 `VITE_SUPABASE_ANON_KEY`。
+        </div>
+      )}
+
+      {isSupabaseConfigured && !session && (
+        <form onSubmit={handleSendMagicLink} className="mt-5 space-y-3 rounded-xl border border-[#1E2328]/10 bg-white/80 p-4">
+          <div className="text-sm text-[#3A4653]">输入邮箱，系统会发送 Magic Link 登录链接。</div>
+          <input
+            type="email"
+            value={loginEmail}
+            onChange={(event) => setLoginEmail(event.target.value)}
+            placeholder="your@email.com"
+            className="w-full rounded-xl border border-[#1E2328]/10 bg-white px-4 py-2.5 text-sm text-[#1E2328] outline-none transition focus:border-[#1E7FBF]/45"
+          />
+          <button
+            type="submit"
+            disabled={isSendingLink}
+            className="rounded-xl bg-[#1E7FBF] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#17699e] disabled:cursor-not-allowed disabled:opacity-70"
+          >
+            {isSendingLink ? '发送中...' : '发送登录链接'}
+          </button>
+        </form>
+      )}
+
+      {isSupabaseConfigured && session && !profile?.username && (
+        <form onSubmit={handleCreateProfile} className="mt-5 space-y-3 rounded-xl border border-[#1E2328]/10 bg-white/80 p-4">
+          <div className="text-sm text-[#3A4653]">首次登录请设置一个唯一用户名。</div>
+          <input
+            type="text"
+            value={pendingUsername}
+            onChange={(event) => setPendingUsername(event.target.value)}
+            placeholder="唯一用户名"
+            className="w-full rounded-xl border border-[#1E2328]/10 bg-white px-4 py-2.5 text-sm text-[#1E2328] outline-none transition focus:border-[#1E7FBF]/45"
+          />
+          <button
+            type="submit"
+            disabled={isCreatingProfile}
+            className="rounded-xl bg-[#1E7FBF] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#17699e] disabled:cursor-not-allowed disabled:opacity-70"
+          >
+            {isCreatingProfile ? '保存中...' : '保存用户名'}
+          </button>
+        </form>
+      )}
+
+      {isSupabaseConfigured && session && profile?.username && (
+        <div className="mt-4 rounded-xl border border-[#1E2328]/10 bg-white/70 px-4 py-3 text-sm text-[#3A4653]">
+          已登录：<span className="font-medium text-[#1E2328]">{profile.username}</span>
+          <button type="button" onClick={handleLogout} className="ml-3 text-[#1E7FBF] hover:text-[#17699e]">
+            退出
+          </button>
+        </div>
+      )}
+
+      {error && <div className="mt-3 text-sm text-[#b44343]">{error}</div>}
+      {hint && <div className="mt-3 text-sm text-[#2d6a4f]">{hint}</div>}
+
+      {isSupabaseConfigured && session && profile?.username && (
+        <form onSubmit={(event) => handleCreateComment(event, null)} className="mt-5 space-y-3">
+          <textarea
+            value={message}
+            onChange={(event) => setMessage(event.target.value)}
+            placeholder="写下你的评论..."
+            rows={4}
+            className="w-full rounded-xl border border-[#1E2328]/10 bg-white px-4 py-3 text-sm text-[#1E2328] outline-none transition focus:border-[#1E7FBF]/45"
+          />
+          <button
+            type="submit"
+            disabled={isPosting}
+            className="rounded-xl bg-[#1E7FBF] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#17699e] disabled:cursor-not-allowed disabled:opacity-70"
+          >
+            {isPosting ? '发布中...' : '发布评论'}
+          </button>
+        </form>
+      )}
+
+      <div className="mt-7 space-y-3">
+        {isLoading ? (
+          <p className="text-sm text-[#3A4653]">评论加载中...</p>
+        ) : comments.length === 0 ? (
+          <p className="text-sm text-[#3A4653]">还没有评论，来写第一条吧。</p>
+        ) : (
+          comments
+            .slice()
+            .reverse()
+            .map((item) => (
+              <article key={item.id} className="rounded-xl border border-[#1E2328]/8 bg-[#F8FCFF] p-4">
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
+                  <span className="font-medium text-[#1E2328]">{item.username}</span>
+                  <span className="text-xs text-[#6f7e8d]">{new Date(item.createdAt).toLocaleString()}</span>
+                </div>
+                <p className="mt-2 whitespace-pre-wrap text-sm leading-7 text-[#3A4653]">{item.message}</p>
+                {session && profile?.username && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActiveReplyId(item.id);
+                      setReplyMessage('');
+                    }}
+                    className="mt-2 text-sm text-[#1E7FBF] transition hover:text-[#17699e]"
+                  >
+                    回复
+                  </button>
+                )}
+
+                {item.replies.length > 0 && (
+                  <div className="mt-3 space-y-2 border-l border-[#1E2328]/10 pl-3">
+                    {item.replies.map((reply) => (
+                      <div key={reply.id} className="rounded-lg bg-white/70 p-3">
+                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
+                          <span className="font-medium text-[#1E2328]">{reply.username}</span>
+                          <span className="text-xs text-[#6f7e8d]">{new Date(reply.createdAt).toLocaleString()}</span>
+                        </div>
+                        <p className="mt-1 whitespace-pre-wrap text-sm leading-7 text-[#3A4653]">{reply.message}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {activeReplyId === item.id && session && profile?.username && (
+                  <form onSubmit={(event) => handleCreateComment(event, item.id)} className="mt-3 space-y-2 rounded-lg bg-white/60 p-3">
+                    <textarea
+                      value={replyMessage}
+                      onChange={(event) => setReplyMessage(event.target.value)}
+                      placeholder={`回复 @${item.username}`}
+                      rows={3}
+                      className="w-full rounded-lg border border-[#1E2328]/10 bg-white px-3 py-2 text-sm text-[#1E2328] outline-none transition focus:border-[#1E7FBF]/45"
+                    />
+                    <div className="flex items-center gap-3">
+                      <button
+                        type="submit"
+                        disabled={isPosting}
+                        className="rounded-lg bg-[#1E7FBF] px-3 py-1.5 text-sm font-medium text-white transition hover:bg-[#17699e] disabled:cursor-not-allowed disabled:opacity-70"
+                      >
+                        发布回复
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActiveReplyId('');
+                          setReplyMessage('');
+                        }}
+                        className="text-sm text-[#3A4653] transition hover:text-[#1E2328]"
+                      >
+                        取消
+                      </button>
+                    </div>
+                  </form>
+                )}
+              </article>
+            ))
+        )}
+      </div>
+    </section>
+  );
+}
 
 function HomePage() {
   return (
@@ -402,6 +787,7 @@ function ProjectDetailPage() {
         <article className="mt-8 max-w-none">
           <ReactMarkdown components={markdownComponents}>{project.content}</ReactMarkdown>
         </article>
+        <CommentsSection key={`project-${project.slug}`} contentType="project" slug={project.slug} />
       </div>
     </section>
   );
@@ -556,6 +942,7 @@ function GraphicsTutorialDetailPage() {
               {tutorial.content}
             </ReactMarkdown>
           </div>
+          <CommentsSection key={`tutorial-${tutorial.slug}`} contentType="tutorial" slug={tutorial.slug} />
         </article>
       </div>
     </section>
