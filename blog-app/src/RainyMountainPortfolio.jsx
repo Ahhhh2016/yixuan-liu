@@ -3,7 +3,9 @@ import { NOTEBOOK_ASCII } from './notebookAscii.js';
 import { UTAH_TEAPOT_ASCII } from './utahTeapotAscii.js';
 import { SCROLL_ASCII } from './scrollAscii.js';
 import { PHONOGRAPH_ASCII } from './phonographAscii.js';
-import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
+import { BrowserRouter, Link, Navigate, Route, Routes, useParams } from 'react-router-dom';
+import { getProjectBySlug } from './projectContent.js';
 
 const nav = [
   { label: 'Home', path: '/' },
@@ -17,16 +19,19 @@ const nav = [
 const graphics = [
     {
       title: "Path Tracer",
+      slug: "path-tracer",
       meta: "Rendering · BRDF · Global Illumination",
       desc: "A gallery-like rendering project presented as if scenes are emerging from mountain mist.",
     },
     {
       title: "Visual Computing Experiments",
+      slug: "visual-computing-experiments",
       meta: "Geometry · Shading · Simulation",
       desc: "Studies in light, surface, and form with restrained visual framing and large image-first cards.",
     },
     {
       title: "Interactive Worlds",
+      slug: "interactive-worlds",
       meta: "Realtime Graphics · Web Visuals",
       desc: "Atmospheric experiments where code behaves like weather, terrain, and memory.",
     },
@@ -110,6 +115,23 @@ const asciiCards = asciiCardsRaw.map((card) => {
   return { ...card, fontSizePx: tunedFontSizePx };
 });
 
+const markdownComponents = {
+  h1: ({ children }) => <h1 className="mt-8 text-3xl font-semibold tracking-[-0.03em] text-[#1E2328] md:text-4xl">{children}</h1>,
+  h2: ({ children }) => <h2 className="mt-8 text-2xl font-semibold tracking-[-0.02em] text-[#1E2328] md:text-3xl">{children}</h2>,
+  h3: ({ children }) => <h3 className="mt-6 text-xl font-semibold text-[#1E2328]">{children}</h3>,
+  p: ({ children }) => <p className="mt-4 text-base leading-8 text-[#3A4653]">{children}</p>,
+  ul: ({ children }) => <ul className="mt-4 list-disc space-y-2 pl-6 text-[#3A4653]">{children}</ul>,
+  ol: ({ children }) => <ol className="mt-4 list-decimal space-y-2 pl-6 text-[#3A4653]">{children}</ol>,
+  li: ({ children }) => <li className="leading-8">{children}</li>,
+  strong: ({ children }) => <strong className="font-semibold text-[#1E2328]">{children}</strong>,
+  code: ({ inline, children }) =>
+    inline ? (
+      <code className="rounded bg-[#E8F3FB] px-1 py-0.5 text-[0.92em] text-[#1E2328]">{children}</code>
+    ) : (
+      <code className="block overflow-x-auto rounded-2xl bg-[#E8F3FB] p-4 text-sm text-[#1E2328]">{children}</code>
+    ),
+};
+
 function HomePage() {
   return (
     <section className="mx-auto flex min-h-[88vh] w-full max-w-7xl flex-col justify-center px-6 py-8 md:px-10 md:py-10">
@@ -167,7 +189,11 @@ function ProjectsPage() {
 
         <div className="grid gap-6 md:grid-cols-3">
           {graphics.map((item, i) => (
-            <article key={item.title} className="group rounded-[28px] border border-[#1E2328]/8 bg-white/55 p-5 shadow-[0_20px_60px_rgba(40,55,70,0.06)] backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:bg-white/72">
+            <Link
+              key={item.title}
+              to={`/projects/${item.slug}`}
+              className="group block rounded-[28px] border border-[#1E2328]/8 bg-white/55 p-5 shadow-[0_20px_60px_rgba(40,55,70,0.06)] backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:bg-white/72 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E7FBF]/45"
+            >
               <div className="relative mb-5 h-56 overflow-hidden rounded-[24px] bg-[linear-gradient(180deg,rgba(189,224,247,0.32),rgba(245,246,244,0.95))]">
                 <div className="absolute bottom-0 left-0 right-0 h-[72%]">
                   <div className="absolute bottom-0 left-[-5%] h-24 w-32 rounded-t-[100%] bg-[#BDE0F7]/70" />
@@ -191,7 +217,7 @@ function ProjectsPage() {
               <h3 className="mt-3 text-2xl tracking-[-0.03em] text-[#1E2328]">{item.title}</h3>
               <p className="mt-2 text-sm text-[#1E7FBF]">{item.meta}</p>
               <p className="mt-4 text-sm leading-7 text-[#3A4653]">{item.desc}</p>
-            </article>
+            </Link>
           ))}
         </div>
       </section>
@@ -321,6 +347,37 @@ function AboutPage() {
   );
 }
 
+function ProjectDetailPage() {
+  const { slug } = useParams();
+  const project = slug ? getProjectBySlug(slug) : null;
+
+  if (!project) {
+    return <Navigate to="/projects" replace />;
+  }
+
+  return (
+    <section className="mx-auto max-w-7xl px-6 py-16 md:px-10 md:py-24">
+      <Link
+        to="/projects"
+        className="inline-block text-sm tracking-wide text-[#1E7FBF] transition-colors hover:text-[#0f5f96]"
+      >
+        ← Back to Projects
+      </Link>
+      <div className="mt-6 rounded-[30px] border border-[#1E2328]/8 bg-white/60 p-8 shadow-[0_18px_60px_rgba(40,55,70,0.06)] backdrop-blur-sm md:p-10">
+        <div className="text-xs uppercase tracking-[0.28em] text-[#5BAEE6]">Project Detail</div>
+        <h1 className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-[#1E2328] md:text-5xl">{project.title}</h1>
+        {project.meta && <p className="mt-3 text-sm text-[#1E7FBF]">{project.meta}</p>}
+        {project.date && <p className="mt-1 text-xs uppercase tracking-[0.18em] text-[#3A4653]">{project.date}</p>}
+        {project.summary && <p className="mt-6 text-base leading-8 text-[#3A4653]">{project.summary}</p>}
+
+        <article className="mt-8 max-w-none">
+          <ReactMarkdown components={markdownComponents}>{project.content}</ReactMarkdown>
+        </article>
+      </div>
+    </section>
+  );
+}
+
 function PortfolioLayout() {
   return (
     <div className="min-h-screen bg-[#EEF6FD] text-[#1E2328] overflow-hidden selection:bg-[#5BAEE6]/25">
@@ -398,6 +455,7 @@ function PortfolioLayout() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/projects" element={<ProjectsPage />} />
+          <Route path="/projects/:slug" element={<ProjectDetailPage />} />
           <Route path="/tech-blogs" element={<TechBlogsPage />} />
           <Route path="/graphics-tutorials" element={<GraphicsTutorialsPage />} />
           <Route path="/novels" element={<NovelsPage />} />
