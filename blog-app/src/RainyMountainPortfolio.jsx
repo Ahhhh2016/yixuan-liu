@@ -205,28 +205,27 @@ export default function RainyMountainPortfolio() {
             </div>
           </div>
 
-          <div className="mt-14 flex gap-5 overflow-x-auto pb-2">
+          <div className="mt-14 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
             {asciiCards.map((card) => (
               <a
                 key={card.key}
                 href={card.href}
                 aria-label={`Go to ${card.title}`}
-                className="group relative w-[360px] shrink-0 overflow-hidden rounded-[24px] border border-[#1E2328]/10 bg-transparent p-4 transition duration-300 hover:-translate-y-1 hover:bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E7FBF]/45"
+                className="group relative min-w-0 overflow-hidden rounded-[24px] bg-transparent p-3 transition duration-300 hover:-translate-y-1 hover:bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E7FBF]/45 md:p-4"
               >
-                <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0)_36%,rgba(30,35,40,0.62)_100%)] opacity-75 transition-opacity duration-300 md:opacity-0 md:group-hover:opacity-100 md:group-focus-visible:opacity-100" />
-
                 <div className="flex h-[210px] items-center justify-center overflow-hidden">
                   <pre
-                    className="m-0 whitespace-pre font-mono leading-[1.04] text-[#1E2328] [font-variant-ligatures:none]"
+                    className="m-0 whitespace-pre font-mono leading-[1.04] text-[#1E2328] transition-colors duration-300 group-hover:text-white group-focus-visible:text-white [font-variant-ligatures:none]"
                     style={{ fontSize: `${card.fontSizePx}px` }}
                   >
                     {card.ascii}
                   </pre>
                 </div>
 
-                <div className="absolute inset-x-0 bottom-0 p-4 text-[#EEF6FD] transition-all duration-300 md:translate-y-2 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100 md:group-focus-visible:translate-y-0 md:group-focus-visible:opacity-100">
-                  <div className="text-[10px] uppercase tracking-[0.22em] text-[#BDE0F7]">{card.subtitle}</div>
-                  <div className="mt-1 text-base font-medium tracking-wide">{card.title}</div>
+                <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
+                  <div className="px-4 py-2 text-sm font-semibold tracking-wide text-black">
+                    {card.title}
+                  </div>
                 </div>
               </a>
             ))}
