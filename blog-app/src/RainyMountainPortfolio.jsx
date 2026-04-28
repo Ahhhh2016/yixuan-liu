@@ -602,16 +602,16 @@ function HomePage() {
               onClick={playNamePronunciation}
               aria-label="播放 Yixuan Liu 的发音"
               title="点击听名字发音"
-              className={`ml-2 inline-flex h-9 w-9 -translate-y-1 items-center justify-center rounded-full border border-[#1E7FBF]/25 bg-white/60 align-middle text-[#1E7FBF] shadow-[0_4px_14px_rgba(30,127,191,0.12)] backdrop-blur-sm transition hover:bg-white/85 hover:text-[#0f5f96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E7FBF]/45 md:h-11 md:w-11 ${isPlayingName ? 'animate-pulse' : ''}`}
+              className={`ml-1.5 inline-flex h-5 w-5 -translate-y-2 items-center justify-center align-middle text-[#1E7FBF]/40 transition hover:text-[#1E7FBF] focus-visible:outline-none focus-visible:text-[#1E7FBF] md:h-6 md:w-6 ${isPlayingName ? 'animate-pulse text-[#1E7FBF]' : ''}`}
             >
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                strokeWidth="2"
+                strokeWidth="1.6"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="h-4 w-4 md:h-5 md:w-5"
+                className="h-3.5 w-3.5 md:h-4 md:w-4"
                 aria-hidden="true"
               >
                 <path d="M11 5L6 9H3a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h3l5 4V5z" />

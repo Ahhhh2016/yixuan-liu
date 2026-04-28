@@ -1,34 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#F6F7F4" />
-      <stop offset="100%" stop-color="#E7ECEF" />
-    </linearGradient>
-    <linearGradient id="farRange" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#3E5F78" stop-opacity="0.55" />
-      <stop offset="100%" stop-color="#3E5F78" stop-opacity="0.18" />
+      <stop offset="0%" stop-color="#6CB7E8" />
+      <stop offset="100%" stop-color="#4FA0D4" />
     </linearGradient>
   </defs>
 
   <rect width="64" height="64" rx="14" ry="14" fill="url(#bg)" />
 
   <path
-    d="M2 44 L14 32 L22 38 L32 26 L42 36 L52 28 L62 38 L62 50 L2 50 Z"
-    fill="url(#farRange)"
+    transform="translate(23.797 60.07) scale(0.0756 -0.0756)"
+    fill="#F6F7F4"
+    stroke="#F6F7F4"
+    stroke-width="22"
+    stroke-linejoin="round"
+    stroke-linecap="round"
+    d="M115 12Q115 44 118 108L120 205Q120 219 117 246Q113 270 113 286Q113 303 107 333Q101 365 101 379Q101 391 91 436Q88 445 87.0 450.5Q86 456 85 458Q81 486 72 527Q55 620 39 674Q24 722 24 739Q24 746 30.0 750.5Q36 755 44 755L56 747Q59 702 83.0 586.5Q107 471 119 454Q121 459 129 541Q136 614 149 686Q161 752 178 752Q183 752 186.0 751.5Q189 751 191 749Q193 747 193 741Q193 732 189 720L185 700L159 551Q154 522 150.0 479.5Q146 437 146 405Q146 396 147 389Q148 381 148 372L142 357V349L144 310L146 289Q149 249 149 229Q149 71 147 27L150 24Q150 22 151 21V17Q151 5 145.5 -3.5Q140 -12 129 -12Q123 -12 119.0 -4.5Q115 3 115 12Z"
   />
-
-  <path
-    d="M2 50 L16 36 L26 44 L36 30 L44 38 L54 32 L62 42 L62 56 L2 56 Z"
-    fill="#1E2328"
-  />
-
-  <g stroke="#1E7FBF" stroke-width="1.4" stroke-linecap="round" opacity="0.55">
-    <line x1="14" y1="10" x2="11" y2="18" />
-    <line x1="26" y1="8"  x2="23" y2="16" />
-    <line x1="40" y1="12" x2="37" y2="20" />
-    <line x1="52" y1="9"  x2="49" y2="17" />
-  </g>
-
-  <circle cx="50" cy="22" r="2.8" fill="#1E7FBF" />
-  <circle cx="50" cy="22" r="2.8" fill="#FFFFFF" opacity="0.25" />
 </svg>
