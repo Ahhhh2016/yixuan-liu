@@ -5,6 +5,10 @@ import { SCROLL_ASCII } from './scrollAscii.js';
 import { PHONOGRAPH_ASCII } from './phonographAscii.js';
 import { useEffect, useMemo, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+import rehypeUnwrapImages from 'rehype-unwrap-images';
 import { BrowserRouter, Link, Navigate, Route, Routes, useParams } from 'react-router-dom';
 import { getProjectBySlug } from './projectContent.js';
 import { getTutorialBySlug, tutorialDetails } from './tutorialContent.js';
@@ -24,19 +28,29 @@ const graphics = [
       title: "Path Tracer",
       slug: "path-tracer",
       meta: "Rendering · BRDF · Global Illumination",
-      desc: "A gallery-like rendering project presented as if scenes are emerging from mountain mist.",
+      desc: "An unbiased Monte Carlo path tracer that numerically solves the rendering equation to produce photorealistic images featuring soft shadows, color bleeding, caustics, and refraction.",
+      cover: "/images/projects/path-tracer/refraction.png",
     },
     {
-      title: "Visual Computing Experiments",
-      slug: "visual-computing-experiments",
-      meta: "Geometry · Shading · Simulation",
-      desc: "Studies in light, surface, and form with restrained visual framing and large image-first cards.",
+      title: "ARAP Mesh Deformation",
+      slug: "arap",
+      meta: "Geometry Processing · Sparse Solver · Interactive",
+      desc: "As-Rigid-As-Possible surface modeling with cotangent Laplacians, SVD rotations, and a cached Cholesky solver — drag a vertex and watch the mesh respond like it has bones.",
+      cover: "/images/projects/arap/armadillo.gif",
     },
     {
-      title: "Interactive Worlds",
-      slug: "interactive-worlds",
-      meta: "Realtime Graphics · Web Visuals",
-      desc: "Atmospheric experiments where code behaves like weather, terrain, and memory.",
+      title: "Half-Edge Mesh Toolkit",
+      slug: "mesh",
+      meta: "Geometry Processing · Half-Edge · Loop · QEM · Remesh",
+      desc: "Atomic edge ops in amortized O(1), Loop subdivision, quadric-error simplification, isotropic remeshing, and bilateral denoising — all validated on a half-edge mesh with hashed lookups.",
+      cover: "/images/projects/mesh/simplify-cow.png",
+    },
+    {
+      title: "Real-Time FEM Soft-Body Simulation",
+      slug: "sim-fem",
+      meta: "Physics Simulation · FEM · Collision · OpenMP",
+      desc: "Tetrahedral finite-element soft-body simulation with StVK elasticity, damping, collision handling, and interactive mouse-driven manipulation in real time.",
+      cover: "/images/projects/sim-fem/ezgif-4adbeb9cbe3097af.gif",
     },
   ];
 
@@ -157,13 +171,57 @@ const markdownComponents = {
   ol: ({ children }) => <ol className="mt-4 list-decimal space-y-2 pl-6 text-[#3A4653]">{children}</ol>,
   li: ({ children }) => <li className="leading-8">{children}</li>,
   strong: ({ children }) => <strong className="font-semibold text-[#1E2328]">{children}</strong>,
-  code: ({ inline, children }) =>
-    inline ? (
+  code: ({ className, children }) => {
+    const isBlock = typeof className === 'string' && /\blanguage-/.test(className);
+    if (isBlock) {
+      return <code className={className}>{children}</code>;
+    }
+    return (
       <code className="rounded bg-[#E8F3FB] px-1 py-0.5 text-[0.92em] text-[#1E2328]">{children}</code>
-    ) : (
-      <code className="block overflow-x-auto rounded-2xl bg-[#E8F3FB] p-4 text-sm text-[#1E2328]">{children}</code>
-    ),
+    );
+  },
+  pre: ({ children }) => (
+    <pre className="mt-4 overflow-x-auto rounded-2xl bg-[#E8F3FB] p-4 text-sm leading-7 text-[#1E2328]">
+      {children}
+    </pre>
+  ),
+  table: ({ children }) => (
+    <div className="mt-6 overflow-x-auto rounded-2xl border border-[#1E2328]/10">
+      <table className="w-full border-collapse text-sm text-[#3A4653]">{children}</table>
+    </div>
+  ),
+  thead: ({ children }) => <thead className="bg-[#E8F3FB] text-[#1E2328]">{children}</thead>,
+  tbody: ({ children }) => <tbody className="divide-y divide-[#1E2328]/10">{children}</tbody>,
+  tr: ({ children }) => <tr>{children}</tr>,
+  th: ({ children, style }) => (
+    <th style={style} className="px-4 py-2 text-left font-semibold tracking-wide">{children}</th>
+  ),
+  td: ({ children, style }) => (
+    <td style={style} className="px-4 py-2 align-top leading-7">{children}</td>
+  ),
+  img: ({ src, alt }) => {
+    const widthMatch = typeof src === 'string' ? src.match(/[?&]w=(\d+)/) : null;
+    const cleanSrc = widthMatch ? src.replace(/[?&]w=\d+/, '').replace(/\?$/, '') : src;
+    const inlineStyle = widthMatch ? { maxWidth: `${widthMatch[1]}px` } : undefined;
+    return (
+      <figure className="mt-6">
+        <img
+          src={cleanSrc}
+          alt={alt || ''}
+          loading="lazy"
+          style={inlineStyle}
+          className="mx-auto block w-full max-w-3xl rounded-2xl border border-[#1E2328]/10 object-contain shadow-[0_18px_60px_rgba(40,55,70,0.08)]"
+        />
+        {alt ? (
+          <figcaption className="mt-2 text-center text-xs text-[#5A6772]">{alt}</figcaption>
+        ) : null}
+      </figure>
+    );
+  },
 };
+
+const markdownPlugins = [remarkGfm, remarkMath];
+const markdownRehypePlugins = [rehypeKatex, rehypeUnwrapImages];
 
 function buildCommentTree(flatComments) {
   const byId = new Map();
@@ -672,24 +730,39 @@ function ProjectsPage() {
               to={`/projects/${item.slug}`}
               className="group block rounded-[28px] border border-[#1E2328]/8 bg-white/55 p-5 shadow-[0_20px_60px_rgba(40,55,70,0.06)] backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:bg-white/72 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E7FBF]/45"
             >
-              <div className="relative mb-5 h-56 overflow-hidden rounded-[24px] bg-[linear-gradient(180deg,rgba(189,224,247,0.32),rgba(245,246,244,0.95))]">
-                <div className="absolute bottom-0 left-0 right-0 h-[72%]">
-                  <div className="absolute bottom-0 left-[-5%] h-24 w-32 rounded-t-[100%] bg-[#BDE0F7]/70" />
-                  <div className="absolute bottom-0 left-[18%] h-36 w-28 rounded-t-[100%] bg-[#4FA4DC]/55" />
-                  <div className="absolute bottom-0 left-[42%] h-20 w-28 rounded-t-[100%] bg-[#2A6FA8]/50" />
-                  <div className="absolute bottom-0 right-[10%] h-40 w-28 rounded-t-[100%] bg-[#5BA3D8]/55" />
-                </div>
-                <svg viewBox="0 0 400 240" className="absolute inset-0 h-full w-full opacity-40">
-                  <path d="M300 35C320 70 350 88 390 105C350 112 318 136 305 170C284 134 258 116 208 104C252 92 283 70 300 35Z" fill="#1E2328" opacity="0.25" />
-                  <path d="M285 106C235 124 198 156 165 206" stroke="#1E2328" strokeWidth="3" fill="none" strokeLinecap="round" opacity="0.36" />
-                </svg>
-                {Array.from({ length: 8 }).map((_, idx) => (
-                  <span
-                    key={idx}
-                    className="absolute top-0 w-px bg-[#4B97CD]/30"
-                    style={{ left: `${10 + idx * 11}%`, height: '22px', animation: `rainFall ${1.8 + idx * 0.22}s linear ${idx * 0.12}s infinite` }}
+              <div
+                className={`relative mb-5 overflow-hidden rounded-[24px] bg-[linear-gradient(180deg,rgba(189,224,247,0.32),rgba(245,246,244,0.95))] ${
+                  item.cover ? 'aspect-square' : 'h-56'
+                }`}
+              >
+                {item.cover ? (
+                  <img
+                    src={item.cover}
+                    alt={item.title}
+                    loading="lazy"
+                    className="absolute inset-0 h-full w-full object-contain transition duration-500 group-hover:scale-[1.03]"
                   />
-                ))}
+                ) : (
+                  <>
+                    <div className="absolute bottom-0 left-0 right-0 h-[72%]">
+                      <div className="absolute bottom-0 left-[-5%] h-24 w-32 rounded-t-[100%] bg-[#BDE0F7]/70" />
+                      <div className="absolute bottom-0 left-[18%] h-36 w-28 rounded-t-[100%] bg-[#4FA4DC]/55" />
+                      <div className="absolute bottom-0 left-[42%] h-20 w-28 rounded-t-[100%] bg-[#2A6FA8]/50" />
+                      <div className="absolute bottom-0 right-[10%] h-40 w-28 rounded-t-[100%] bg-[#5BA3D8]/55" />
+                    </div>
+                    <svg viewBox="0 0 400 240" className="absolute inset-0 h-full w-full opacity-40">
+                      <path d="M300 35C320 70 350 88 390 105C350 112 318 136 305 170C284 134 258 116 208 104C252 92 283 70 300 35Z" fill="#1E2328" opacity="0.25" />
+                      <path d="M285 106C235 124 198 156 165 206" stroke="#1E2328" strokeWidth="3" fill="none" strokeLinecap="round" opacity="0.36" />
+                    </svg>
+                    {Array.from({ length: 8 }).map((_, idx) => (
+                      <span
+                        key={idx}
+                        className="absolute top-0 w-px bg-[#4B97CD]/30"
+                        style={{ left: `${10 + idx * 11}%`, height: '22px', animation: `rainFall ${1.8 + idx * 0.22}s linear ${idx * 0.12}s infinite` }}
+                      />
+                    ))}
+                  </>
+                )}
               </div>
               <div className="text-xs uppercase tracking-[0.22em] text-[#5BAEE6]">0{i + 1}</div>
               <h3 className="mt-3 text-2xl tracking-[-0.03em] text-[#1E2328]">{item.title}</h3>
@@ -978,7 +1051,7 @@ function ProjectDetailPage() {
         {project.summary && <p className="mt-6 text-base leading-8 text-[#3A4653]">{project.summary}</p>}
 
         <article className="mt-8 max-w-none">
-          <ReactMarkdown components={markdownComponents}>{project.content}</ReactMarkdown>
+          <ReactMarkdown remarkPlugins={markdownPlugins} rehypePlugins={markdownRehypePlugins} components={markdownComponents}>{project.content}</ReactMarkdown>
         </article>
         <CommentsSection key={`project-${project.slug}`} contentType="project" slug={project.slug} />
       </div>
@@ -1119,6 +1192,8 @@ function GraphicsTutorialDetailPage() {
 
           <div className="mt-8">
             <ReactMarkdown
+              remarkPlugins={markdownPlugins}
+              rehypePlugins={markdownRehypePlugins}
               components={{
                 ...markdownComponents,
                 h2: ({ children }) => {
