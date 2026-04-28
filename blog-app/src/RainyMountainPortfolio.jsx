@@ -1076,9 +1076,16 @@ function PortfolioLayout() {
         <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6 md:px-10">
           <Link
             to="/"
-            className="text-sm tracking-[0.25em] text-[#3A4653] uppercase transition-colors hover:text-[#1E2328]"
+            className="inline-flex items-center gap-3 text-sm tracking-[0.25em] text-[#3A4653] uppercase transition-colors hover:text-[#1E2328]"
+            aria-label="Yixuan Liu — home"
           >
-            Yixuan Liu
+            <img
+              src="/favicon.svg"
+              alt=""
+              aria-hidden="true"
+              className="h-7 w-7 shrink-0 rounded-[6px] shadow-sm"
+            />
+            <span>Yixuan Liu</span>
           </Link>
           <div className="hidden gap-8 md:flex">
             {nav.map((item) => (
