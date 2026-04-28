@@ -788,6 +788,80 @@ function NovelsPage() {
   );
 }
 
+const socialLinks = [
+  {
+    label: 'Email',
+    href: 'yixuan_liu1@brown.edu',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="h-5 w-5">
+        <rect x="3" y="5" width="18" height="14" rx="2.4" />
+        <path d="M3.5 7.2l8.5 5.6 8.5-5.6" />
+      </svg>
+    ),
+  },
+  {
+    label: 'GitHub',
+    href: 'https://github.com/Ahhhh2016',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="h-5 w-5">
+        <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.838 1.237 1.838 1.237 1.07 1.834 2.809 1.304 3.495.997.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.93 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.984-.399 3.005-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.654 1.652.243 2.873.12 3.176.77.84 1.235 1.91 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.604-.015 2.896-.015 3.286 0 .322.218.694.825.576C20.565 22.092 24 17.592 24 12.297 24 5.67 18.627.297 12 .297" />
+      </svg>
+    ),
+  },
+  {
+    label: 'LinkedIn',
+    href: 'https://www.linkedin.com/in/yixuan-liu1/',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="h-5 w-5">
+        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124zM7.119 20.452H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+      </svg>
+    ),
+  },
+  {
+    label: 'Bilibili',
+    href: 'https://space.bilibili.com/13940022',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="h-5 w-5">
+        <path d="M18.223 3.086a1.25 1.25 0 0 1 0 1.768L17.08 5.996h1.17A3.75 3.75 0 0 1 22 9.747v7.5a3.75 3.75 0 0 1-3.75 3.75H5.75A3.75 3.75 0 0 1 2 17.247v-7.5a3.75 3.75 0 0 1 3.75-3.751h1.166L5.775 4.855a1.25 1.25 0 1 1 1.767-1.768l2.652 2.652c.079.078.145.165.198.257h3.213c.053-.092.12-.179.198-.257l2.652-2.652a1.25 1.25 0 0 1 1.768 0zM18.25 8.496H5.75c-.69 0-1.25.56-1.25 1.25v7.5c0 .691.56 1.252 1.25 1.252h12.5c.69 0 1.25-.56 1.25-1.25v-7.5c0-.69-.56-1.25-1.25-1.25zM8.5 11a1.25 1.25 0 0 1 1.25 1.25v1.5a1.25 1.25 0 1 1-2.5 0v-1.5C7.25 11.56 7.81 11 8.5 11zm7 0a1.25 1.25 0 0 1 1.25 1.25v1.5a1.25 1.25 0 1 1-2.5 0v-1.5c0-.69.56-1.25 1.25-1.25z" />
+      </svg>
+    ),
+  },
+  {
+    label: '小红书',
+    href: 'https://www.rednote.com/user/profile/5f81eb15000000000101d1c2',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-5 w-5">
+        <rect x="2.5" y="2.5" width="19" height="19" rx="4.2" stroke="currentColor" strokeWidth="1.6" />
+        <text
+          x="12"
+          y="13"
+          textAnchor="middle"
+          dominantBaseline="middle"
+          fill="currentColor"
+          fontSize="7.2"
+          fontWeight="700"
+          fontFamily="'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif"
+        >
+          小红书
+        </text>
+      </svg>
+    ),
+  },
+];
+
+const aboutFacts = [
+  'I like rainy days.',
+  'I often feel trapped in self-hatred, anxiety, and depression. Sometimes life feels unbearable, and just hanging in there already takes all my energy.',
+  'I enjoy reading papers, working through formulas, and writing everything out step by step. There’s always that one moment when everything suddenly clicks.',
+  'I enjoy debugging.',
+  'I tend to give up on books halfway through.',
+  'I struggle with appearance anxiety and find it hard to look at photos of myself.',
+  'I like trying new things—if there’s something on the menu I’ve never had before, I’ll choose it, even if it means I often end up disappointed.',
+  'I’ve been called a “menu genius” (honestly just lucky at the time) and a “debugging genius” (this one I’ll take).',
+  'I like imagining and creating animations that children would enjoy.',
+  'I’m a people person who likes sharing and expressing myself, and I feel really happy when I receive comments.',
+];
+
 function AboutPage() {
   return (
     <section className="mx-auto max-w-7xl px-6 py-16 md:px-10 md:py-24">
@@ -795,35 +869,66 @@ function AboutPage() {
         <div className="grid gap-8 md:grid-cols-[1fr_0.9fr]">
           <div>
             <div className="text-xs uppercase tracking-[0.28em] text-[#5BAEE6]">About</div>
-            <h2 className="mt-3 text-3xl font-semibold tracking-[-0.03em] md:text-5xl">A quiet, technical landscape.</h2>
+            <h2 className="mt-3 text-3xl font-semibold tracking-[-0.03em] md:text-5xl">Yixuan Liu</h2>
             <p className="mt-6 max-w-2xl text-base leading-8 text-[#3A4653]">
-              This portfolio blends graphics, AI, systems thinking, and reflective writing. The website is conceived as an interactive shanshui scroll: rain as animation, mountains as structure, mist as spacing, and ink as typography.
+              I am a computer science master student at Brown University, focusing on visual computing. I received my BS in computer science from Southwest Jiaotong University and University of Leeds.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3 text-sm text-[#3A4653]">
-              {['GitHub', 'Scholar', 'Resume', 'Email'].map((item) => (
-                <span key={item} className="rounded-full border border-[#1E2328]/10 bg-white/60 px-4 py-2">{item}</span>
+            <p className="mt-4 max-w-2xl text-base font-semibold leading-8 text-[#1E2328]">
+              I am actively looking for full-time opportunities starting in winter 2026!
+            </p>
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              {socialLinks.map((item) => (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  target={item.href.startsWith('mailto:') ? undefined : '_blank'}
+                  rel={item.href.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
+                  aria-label={item.label}
+                  title={item.label}
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#1E2328]/10 bg-white/60 text-[#3A4653] transition duration-300 hover:-translate-y-0.5 hover:border-[#1E7FBF]/35 hover:bg-white/90 hover:text-[#1E7FBF] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E7FBF]/40"
+                >
+                  {item.icon}
+                </a>
               ))}
             </div>
           </div>
-          <div className="relative min-h-[280px] overflow-hidden rounded-[28px] bg-[linear-gradient(180deg,rgba(189,224,247,0.22),rgba(245,246,244,0.96))] p-6">
-            <div className="absolute inset-x-8 top-8 h-24 rounded-full bg-white/40 blur-3xl" style={{ animation: 'fogFloat 9s ease-in-out infinite' }} />
-            <div className="absolute bottom-0 left-[-5%] h-28 w-36 rounded-t-[100%] bg-[#BDE0F7]/70" />
-            <div className="absolute bottom-0 left-[20%] h-44 w-32 rounded-t-[100%] bg-[#6FB8E5]/55" />
-            <div className="absolute bottom-0 right-[18%] h-56 w-32 rounded-t-[100%] bg-[#2E7AB0]/58" />
-            <svg viewBox="0 0 420 300" className="absolute inset-0 h-full w-full opacity-60">
-              <path d="M310 48C338 88 368 111 404 130C364 139 333 165 319 203C295 165 270 146 221 132C260 117 293 92 310 48Z" fill="#1E2328" opacity="0.22" />
-              <path d="M298 129C247 145 213 176 175 238" stroke="#1E2328" strokeWidth="4" fill="none" strokeLinecap="round" opacity="0.35" />
-              <path d="M287 123C244 139 205 169 156 222" stroke="#1E7FBF" strokeWidth="2.5" fill="none" strokeLinecap="round" opacity="0.48" />
-            </svg>
+          <div className="relative min-h-[280px] overflow-hidden rounded-[28px] bg-[linear-gradient(180deg,rgba(189,224,247,0.22),rgba(245,246,244,0.96))]">
+            <img
+              src="/about.jpg"
+              alt="Yixuan in front of a lake and mountains"
+              loading="lazy"
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+            <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(238,246,253,0.12)_0%,rgba(238,246,253,0)_45%,rgba(40,55,70,0.18)_100%)]" />
             {Array.from({ length: 12 }).map((_, i) => (
               <span
                 key={i}
-                className="absolute top-0 w-px bg-[#4B97CD]/30"
-                style={{ left: `${12 + i * 6}%`, height: '20px', animation: `rainFall ${1.7 + i * 0.14}s linear ${i * 0.16}s infinite` }}
+                className="pointer-events-none absolute top-0 w-px bg-white/50"
+                style={{ left: `${8 + i * 7}%`, height: '22px', animation: `rainFall ${1.7 + i * 0.14}s linear ${i * 0.16}s infinite` }}
               />
             ))}
           </div>
         </div>
+      </div>
+
+      <div className="mt-16 px-2 md:px-4">
+        <div className="max-w-2xl">
+          <div className="text-xs uppercase tracking-[0.28em] text-[#5BAEE6]/80">A little closer</div>
+          <h3 className="mt-3 text-2xl tracking-[-0.02em] text-[#1E2328]/85 md:text-3xl">Ten little things</h3>
+        </div>
+
+        <ol className="mt-10 flex flex-col gap-7 md:gap-8">
+          {aboutFacts.map((fact, index) => (
+            <li key={index} className="flex gap-5">
+              <span className="shrink-0 pt-[2px] font-mono text-[11px] tracking-[0.22em] text-[#5BAEE6]/70">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <p className="max-w-2xl text-[15px] leading-8 text-[#3A4653]/85 md:leading-9">
+                {fact}
+              </p>
+            </li>
+          ))}
+        </ol>
       </div>
     </section>
   );
