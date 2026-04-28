@@ -858,7 +858,7 @@ const aboutFacts = [
   'I struggle with appearance anxiety and find it hard to look at photos of myself.',
   'I like trying new things—if there’s something on the menu I’ve never had before, I’ll choose it, even if it means I often end up disappointed.',
   'I’ve been called a “menu genius” (honestly just lucky at the time) and a “debugging genius” (this one I’ll take).',
-  'I like imagining and creating animations that children would enjoy.',
+  'I want to make animations that children would enjoy.',
   'I’m a people person who likes sharing and expressing myself, and I feel really happy when I receive comments.',
 ];
 
@@ -911,24 +911,44 @@ function AboutPage() {
         </div>
       </div>
 
-      <div className="mt-16 px-2 md:px-4">
-        <div className="max-w-2xl">
+      <div className="mt-16 md:mt-20">
+        <div className="mb-8 max-w-2xl px-2 md:mb-10 md:px-4">
           <div className="text-xs uppercase tracking-[0.28em] text-[#5BAEE6]/80">A little closer</div>
           <h3 className="mt-3 text-2xl tracking-[-0.02em] text-[#1E2328]/85 md:text-3xl">Ten little things</h3>
         </div>
 
-        <ol className="mt-10 flex flex-col gap-7 md:gap-8">
-          {aboutFacts.map((fact, index) => (
-            <li key={index} className="flex gap-5">
-              <span className="shrink-0 pt-[2px] font-mono text-[11px] tracking-[0.22em] text-[#5BAEE6]/70">
-                {String(index + 1).padStart(2, '0')}
-              </span>
-              <p className="max-w-2xl text-[15px] leading-8 text-[#3A4653]/85 md:leading-9">
-                {fact}
-              </p>
-            </li>
-          ))}
-        </ol>
+        <div
+          className="relative overflow-hidden rounded-[6px] px-7 pb-12 pt-10 md:px-16 md:pb-16 md:pt-12"
+          style={{
+            backgroundImage: `repeating-linear-gradient(to bottom, transparent 0, transparent 35px, rgba(120, 150, 180, 0.22) 35px, rgba(120, 150, 180, 0.22) 36px)`,
+            backgroundPosition: '0 14px',
+          }}
+        >
+          <div className="pointer-events-none absolute inset-y-0 left-12 w-px bg-[#D6736B]/30 md:left-24" />
+
+          <ol className="relative pl-6 md:pl-12">
+            {aboutFacts.map((fact, index) => (
+              <li
+                key={index}
+                className="grid grid-cols-[auto_1fr] items-baseline gap-x-3 pb-3 last:pb-0 md:gap-x-5"
+              >
+                <span
+                  aria-hidden="true"
+                  className="select-none text-sm text-[#C0584F]/75 md:text-base"
+                  style={{ lineHeight: '36px' }}
+                >
+                  {index + 1}.
+                </span>
+                <p
+                  className="max-w-2xl text-[15px] text-[#3A4653]/90 md:text-base"
+                  style={{ lineHeight: '36px' }}
+                >
+                  {fact}
+                </p>
+              </li>
+            ))}
+          </ol>
+        </div>
       </div>
     </section>
   );
