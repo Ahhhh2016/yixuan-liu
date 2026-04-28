@@ -549,6 +549,43 @@ function CommentsSection({ contentType, slug }) {
 }
 
 function HomePage() {
+  const [isPlayingName, setIsPlayingName] = useState(false);
+
+  const playNamePronunciation = () => {
+    if (isPlayingName) return;
+    setIsPlayingName(true);
+
+    const fallbackToSpeech = () => {
+      if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
+        setIsPlayingName(false);
+        return;
+      }
+      try {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance('Yixuan Liu');
+        utter.lang = 'zh-CN';
+        utter.rate = 0.95;
+        utter.onend = () => setIsPlayingName(false);
+        utter.onerror = () => setIsPlayingName(false);
+        window.speechSynthesis.speak(utter);
+      } catch {
+        setIsPlayingName(false);
+      }
+    };
+
+    try {
+      const audio = new Audio('/name.m4a');
+      audio.onended = () => setIsPlayingName(false);
+      audio.onerror = () => fallbackToSpeech();
+      const playPromise = audio.play();
+      if (playPromise && typeof playPromise.then === 'function') {
+        playPromise.catch(() => fallbackToSpeech());
+      }
+    } catch {
+      fallbackToSpeech();
+    }
+  };
+
   return (
     <section className="mx-auto flex min-h-[88vh] w-full max-w-7xl flex-col justify-center px-6 py-8 md:px-10 md:py-10">
       <div>
@@ -558,7 +595,32 @@ function HomePage() {
         </div>
         <h1 className="w-full max-w-none text-5xl font-extrabold leading-[1.02] tracking-[-0.04em] text-[#1E2328] md:text-7xl">
           Hi. Welcome.
-          <span className="block text-[#1E7FBF]">I'm Yixuan Liu, who learns computer graphics, AI, and builds applications.</span>
+          <span className="block text-[#1E7FBF]">
+            I'm Yixuan Liu
+            <button
+              type="button"
+              onClick={playNamePronunciation}
+              aria-label="播放 Yixuan Liu 的发音"
+              title="点击听名字发音"
+              className={`ml-2 inline-flex h-9 w-9 -translate-y-1 items-center justify-center rounded-full border border-[#1E7FBF]/25 bg-white/60 align-middle text-[#1E7FBF] shadow-[0_4px_14px_rgba(30,127,191,0.12)] backdrop-blur-sm transition hover:bg-white/85 hover:text-[#0f5f96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E7FBF]/45 md:h-11 md:w-11 ${isPlayingName ? 'animate-pulse' : ''}`}
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="h-4 w-4 md:h-5 md:w-5"
+                aria-hidden="true"
+              >
+                <path d="M11 5L6 9H3a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h3l5 4V5z" />
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+              </svg>
+            </button>
+            , who learns computer graphics, AI, and builds applications.
+          </span>
         </h1>
       </div>
 
