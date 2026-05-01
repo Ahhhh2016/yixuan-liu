@@ -8,6 +8,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import rehypeRaw from 'rehype-raw';
 import rehypeUnwrapImages from 'rehype-unwrap-images';
 import { BrowserRouter, Link, Navigate, Route, Routes, useParams } from 'react-router-dom';
 import { getProjectBySlug } from './projectContent.js';
@@ -24,6 +25,34 @@ const nav = [
 ];
 
 const graphics = [
+    {
+      title: "Monster Mash Reproduction",
+      slug: "monster-mash",
+      meta: "Sketch-based Modeling · ARAP · Deformation · Animation",
+      desc: "A reproduction study of Google Research's Monster Mash workflow, from 2D sketch construction to layered deformation and interactive character animation.",
+      cover: "/images/projects/monster-mash/image-1.png",
+    },
+    {
+      title: "Stippling Studio",
+      slug: "stippling",
+      meta: "NPR · Geometry Processing · Video Stylization · Reconstruction",
+      desc: "A stippling-focused graphics project spanning weighted LBG, video stylization, multi-class stippling, color stippling, and learning-based reconstruction.",
+      cover: "/images/projects/stippling/cover.png",
+    },
+    {
+      title: "Luminary Studio",
+      slug: "luminary",
+      meta: "Realtime Graphics · OpenGL · Particles · Physics",
+      desc: "A real-time Kongming lantern simulation with mesh rendering, particle flame effects, and atmospheric night-scene visuals.",
+      cover: "/images/projects/luminary/290371995-18363e4a-ea63-48aa-bbc0-dfb1ee8d89a2.png",
+    },
+    {
+      title: "Tea for Two - Flight Edition",
+      slug: "teafortwoflightedition",
+      meta: "Realtime Graphics · OpenGL · Stylized Rendering",
+      desc: "A real-time first-person flight graphics final project featuring procedural terrain and water, shadow mapping, portal rendering, and stylized post-processing effects.",
+      cover: "/images/projects/tea-for-two-flight-edition-cover.png",
+    },
     {
       title: "Path Tracer",
       slug: "path-tracer",
@@ -72,10 +101,13 @@ const ai = [
     },
   ];
 
-const blogs = [
-    "Notes on rendering, systems, and aesthetic interfaces.",
-    "Field journals from graphics, AI, and product experiments.",
-    "Long-form reflections written like essays on rain-washed paper.",
+const techBlogPosts = [
+    {
+      title: '火山引擎GitHub CI + 对象存储 + CDN静态资源网站部署总结',
+      meta: 'Jan 26, 2026 · CSDN · DevOps / CDN',
+      summary: '哇 第一次接触带CDN的网站部署，好好玩。',
+      href: 'https://blog.csdn.net/lyx_2016/article/details/157376921',
+    },
   ];
 
 const tutorials = tutorialDetails.length
@@ -221,7 +253,7 @@ const markdownComponents = {
 };
 
 const markdownPlugins = [remarkGfm, remarkMath];
-const markdownRehypePlugins = [rehypeKatex, rehypeUnwrapImages];
+const markdownRehypePlugins = [rehypeKatex, rehypeRaw, rehypeUnwrapImages];
 
 function buildCommentTree(flatComments) {
   const byId = new Map();
@@ -796,45 +828,28 @@ function ProjectsPage() {
 function TechBlogsPage() {
   return (
     <section className="mx-auto max-w-7xl px-6 py-16 md:px-10 md:py-24">
-      <div className="grid gap-8 md:grid-cols-[0.8fr_1.2fr]">
-        <div>
-          <div className="text-xs uppercase tracking-[0.28em] text-[#5BAEE6]">Tech Blogs</div>
-          <h2 className="mt-3 text-3xl font-semibold tracking-[-0.03em] md:text-5xl">Written on rain-washed paper.</h2>
-        </div>
-        <div className="rounded-[30px] border border-[#1E2328]/8 bg-white/58 p-8 shadow-[0_18px_60px_rgba(40,55,70,0.06)] backdrop-blur-sm">
-          <div className="space-y-6">
-            {blogs.map((line, i) => (
-              <div key={line} className="border-b border-[#1E2328]/6 pb-6 last:border-none last:pb-0">
-                <div className="text-xs uppercase tracking-[0.22em] text-[#5BAEE6]">Essay 0{i + 1}</div>
-                <p className="mt-3 max-w-2xl text-lg leading-9 text-[#3A4653]">{line}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function GraphicsTutorialsPage() {
-  return (
-    <section className="mx-auto max-w-7xl px-6 py-16 md:px-10 md:py-24">
       <div className="mb-10">
-          <div className="text-xs uppercase tracking-[0.28em] text-[#5BAEE6]">Graphics Tutorials</div>
-        <h2 className="mt-3 text-3xl font-semibold tracking-[-0.03em] md:text-5xl">Step-by-step graphics notes.</h2>
+        <div className="text-xs uppercase tracking-[0.28em] text-[#5BAEE6]">Tech Blogs</div>
+        <h2 className="mt-3 text-3xl font-semibold tracking-[-0.03em] md:text-5xl">Written on rain-washed paper.</h2>
+        <p className="mt-4 max-w-2xl text-base leading-8 text-[#3A4653]">
+          Longer write-ups in Chinese often live on CSDN; cards below open the full article in a new tab.
+        </p>
       </div>
-      <div className="grid gap-6 md:grid-cols-3">
-        {tutorials.map((item, i) => (
-          <Link
-            key={item.title}
-            to={`/graphics-tutorials/${item.slug}`}
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {techBlogPosts.map((item, i) => (
+          <a
+            key={item.href}
+            href={item.href}
+            target="_blank"
+            rel="noopener noreferrer"
             className="block rounded-[28px] border border-[#1E2328]/8 bg-white/60 p-6 shadow-[0_16px_50px_rgba(40,55,70,0.05)] backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:bg-white/72 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E7FBF]/45"
           >
-            <div className="text-xs uppercase tracking-[0.22em] text-[#5BAEE6]">Tutorial 0{i + 1}</div>
-            <h3 className="mt-3 text-2xl tracking-[-0.03em]">{item.title}</h3>
+            <div className="text-xs uppercase tracking-[0.22em] text-[#5BAEE6]">Post 0{i + 1}</div>
+            <h3 className="mt-3 text-xl font-medium tracking-[-0.03em] text-[#1E2328] md:text-2xl">{item.title}</h3>
             <p className="mt-2 text-sm text-[#1E7FBF]">{item.meta}</p>
-            <p className="mt-4 text-sm leading-7 text-[#3A4653]">{item.summary || 'Guided walkthrough format for this topic.'}</p>
-          </Link>
+            <p className="mt-4 text-sm leading-7 text-[#3A4653]">{item.summary}</p>
+            <p className="mt-5 text-xs font-medium uppercase tracking-[0.18em] text-[#5BAEE6]">Read on CSDN →</p>
+          </a>
         ))}
       </div>
     </section>
@@ -848,14 +863,8 @@ function NovelsPage() {
         <div className="text-xs uppercase tracking-[0.28em] text-[#5BAEE6]">Novels</div>
         <h2 className="mt-3 text-3xl font-semibold tracking-[-0.03em] md:text-5xl">Stories in the same atmosphere.</h2>
       </div>
-      <div className="space-y-6 rounded-[30px] border border-[#1E2328]/8 bg-white/58 p-8 shadow-[0_18px_60px_rgba(40,55,70,0.06)] backdrop-blur-sm">
-        {['Rain over Silent Peaks', 'Letters Through Fog', 'The Last Teapot Sketch'].map((title, i) => (
-          <article key={title} className="border-b border-[#1E2328]/6 pb-6 last:border-none last:pb-0">
-            <div className="text-xs uppercase tracking-[0.22em] text-[#5BAEE6]">Novel 0{i + 1}</div>
-            <h3 className="mt-3 text-2xl tracking-[-0.03em] text-[#1E2328]">{title}</h3>
-            <p className="mt-3 text-base leading-8 text-[#3A4653]">A long-form fiction entry blending memory, landscape, and technology in a reflective voice.</p>
-          </article>
-        ))}
+      <div className="rounded-[30px] border border-[#1E2328]/8 bg-white/58 p-8 shadow-[0_18px_60px_rgba(40,55,70,0.06)] backdrop-blur-sm">
+        <p className="text-center text-lg leading-8 text-[#3A4653] md:text-xl">to be published</p>
       </div>
     </section>
   );
@@ -1136,10 +1145,10 @@ function GraphicsTutorialDetailPage() {
   return (
     <section className="mx-auto max-w-7xl px-6 py-16 md:px-10 md:py-24">
       <Link
-        to="/graphics-tutorials"
+        to="/"
         className="inline-block text-sm tracking-wide text-[#1E7FBF] transition-colors hover:text-[#0f5f96]"
       >
-        ← Back to Graphics Tutorials
+        ← Home
       </Link>
       <div className="mt-6 grid gap-8 rounded-[30px] border border-[#1E2328]/8 bg-white/60 p-6 shadow-[0_18px_60px_rgba(40,55,70,0.06)] backdrop-blur-sm md:grid-cols-[260px_minmax(0,1fr)] md:p-8">
         <aside className="md:sticky md:top-8 md:self-start">
@@ -1308,7 +1317,10 @@ function PortfolioLayout() {
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/projects/:slug" element={<ProjectDetailPage />} />
           <Route path="/tech-blogs" element={<TechBlogsPage />} />
-          <Route path="/graphics-tutorials" element={<GraphicsTutorialsPage />} />
+          <Route
+            path="/graphics-tutorials"
+            element={<Navigate to={`/graphics-tutorials/${tutorials[0].slug}`} replace />}
+          />
           <Route path="/graphics-tutorials/:slug" element={<GraphicsTutorialDetailPage />} />
           <Route path="/novels" element={<NovelsPage />} />
           <Route path="/about" element={<AboutPage />} />
