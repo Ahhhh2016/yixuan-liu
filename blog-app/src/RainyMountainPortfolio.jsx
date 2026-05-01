@@ -746,7 +746,7 @@ function HomePage() {
   };
 
   return (
-    <section className="mx-auto flex min-h-[88vh] w-full max-w-7xl flex-col justify-center px-6 py-8 md:px-10 md:py-10">
+    <section className="mx-auto flex min-h-[88vh] w-full max-w-6xl flex-col justify-center px-6 py-8 md:px-10 md:py-10">
       <div>
         <div className="mb-5 inline-flex items-center gap-3 rounded-full border border-[#1E7FBF]/10 bg-white/45 px-4 py-2 backdrop-blur-sm">
           <span className="h-2 w-2 rounded-full bg-[#5BAEE6]" />
@@ -813,7 +813,7 @@ function HomePage() {
 function ProjectsPage() {
   return (
     <>
-      <section className="mx-auto max-w-7xl px-6 py-16 md:px-10 md:py-24">
+      <section className="mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-24">
         <div className="mb-10 flex items-end justify-between gap-6">
           <div>
             <Link
@@ -879,7 +879,7 @@ function ProjectsPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-16 md:px-10 md:py-24">
+      <section className="mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-24">
         <div className="mb-10">
           <div className="text-xs uppercase tracking-[0.28em] text-[#5BAEE6]">Apps & Plugins</div>
           <h2 className="mt-3 text-3xl font-semibold tracking-[-0.03em] md:text-5xl">Shipped tools you can open today.</h2>
@@ -1422,7 +1422,7 @@ function PortfolioLayout() {
       </div>
 
       <header className="relative z-10">
-        <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6 md:px-10">
+        <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6 md:px-10">
           <Link
             to="/"
             className="inline-flex items-center gap-3 text-sm tracking-[0.25em] text-[#3A4653] uppercase transition-colors hover:text-[#1E2328]"
