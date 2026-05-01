@@ -33,6 +33,13 @@ const graphics = [
       cover: "/images/projects/monster-mash/image-1.png",
     },
     {
+      title: "A Small Firework",
+      slug: "a-small-firework",
+      meta: "Three.js · Web Audio · GLSL · Particles · Procedural Art",
+      desc: "Interactive particle fireworks and a shader-driven handheld sparkler in the browser, with synthesized launch, bloom, drift, scatter, and crackle sounds.",
+      cover: "/images/projects/a-small-firework.gif",
+    },
+    {
       title: "Stippling Studio",
       slug: "stippling",
       meta: "NPR · Geometry Processing · Video Stylization · Reconstruction",
@@ -85,28 +92,80 @@ const graphics = [
 
 const ai = [
     {
-      title: "Audio / AI Research",
-      meta: "Self-Supervised Learning · Representation",
-      desc: "Research prototypes and technical explorations with a quieter, editorial presentation.",
+      title: "MultiTranslator",
+      meta: "DeepL · LibreTranslate · Web Speech API · Static + Serverless",
+      desc: "A zero-dependency, single-file web translator: six languages via DeepL and LibreTranslate, optional Vercel proxy so API keys never ship to the client, and read-aloud through the browser’s Web Speech API. Open index.html locally or deploy to any static host.",
+      href: "https://mt-translator.vercel.app/",
+      repo: "https://github.com/Ahhhh2016/multi-translator",
+      cover: "/images/projects/multi-translator.jpg",
     },
     {
-      title: "Agentic Product Experiments",
-      meta: "UX · Systems · LLMs",
-      desc: "Interfaces and systems where intelligence feels thoughtful, warm, and unobtrusive.",
+      title: "DeskPet Seiko",
+      meta: "Godot 4 · GDScript · Qwen API · macOS",
+      desc: "An AI desktop pet: chat beside the pet with qwen-plus, study mode with a Pomodoro-style focus timer, idle sleep, drag to reposition, and settings for API keys and sound. Ships as a macOS .dmg (first launch may require “Open Anyway” in Gatekeeper).",
+      repo: "https://github.com/Ahhhh2016/DeskPet-Seiko",
+      cover: "/images/projects/deskpet.jpg",
     },
     {
-      title: "Creative AI Tools",
-      meta: "Tools · Interaction · Prototyping",
-      desc: "Projects that connect artistic intuition with technical rigor.",
+      title: "WeekWise Training Plan",
+      meta: "React · TypeScript · Vite · Express · GitHub AI",
+      desc: "Chat with an AI fitness coach to generate a personalized 7-day training plan, edit slots inline, track daily completion, and print an A4-friendly layout. Bilingual UI (English / 中文).",
+      href: "https://weekwise-trainingplan.vercel.app/",
+      repo: "https://github.com/Ahhhh2016/weekwise-trainingplan",
+      cover: "/images/projects/weekplan.jpg",
+    },
+    {
+      title: "PomoKanban",
+      meta: "Obsidian · TypeScript · Pomodoro · Kanban",
+      desc: "A Pomodoro-enhanced Kanban plugin for Obsidian: markdown boards, integrated timers and stopwatch, automatic breaks and auto-rounds, per-card time logs, due dates, and estimates — install as “Pomodoro Kanban” from Community Plugins.",
+      repo: "https://github.com/Ahhhh2016/pomokanban",
+      cover: "/images/projects/pomokanban.jpg",
+    },
+    {
+      title: "梦搭AI",
+      meta: "Career · Web · AI Companion",
+      desc: "A web companion for job search and career prep (Pony Resume). Browse and use the product online; source and collaboration live on GitHub.",
+      href: "http://mengdaai.com/",
+      repo: "https://github.com/xiyu97gogo/pony_resume",
+      cover: "/images/projects/mengdaai.jpg",
     },
   ];
 
 const techBlogPosts = [
     {
       title: '火山引擎GitHub CI + 对象存储 + CDN静态资源网站部署总结',
-      meta: 'Jan 26, 2026 · CSDN · DevOps / CDN',
+      date: 'Jan 26, 2026',
+      dateTime: '2026-01-26',
+      tags: ['DevOps', 'CDN', 'Volcano Engine'],
       summary: '哇 第一次接触带CDN的网站部署，好好玩。',
       href: 'https://blog.csdn.net/lyx_2016/article/details/157376921',
+    },
+    {
+      title: '网站无法访问排查SOP',
+      date: 'Jan 21, 2026',
+      dateTime: '2026-01-21',
+      tags: ['Networking', 'DNS', 'SOP'],
+      summary:
+        '从本机协议栈到 DNS 的分步排查：ping 127.0.0.1、本机 IP、网关、8.8.8.8、域名等，整理成可照着做的 SOP。',
+      href: 'https://blog.csdn.net/lyx_2016/article/details/157189406',
+    },
+    {
+      title: '尝试理清楚Github fork, tag, release和PR',
+      date: 'Dec 25, 2025',
+      dateTime: '2025-12-25',
+      tags: ['GitHub', 'Obsidian', 'Open source'],
+      summary:
+        '以 Obsidian 插件上架为例，梳理 fork 与 clone、提 PR、tag/release 的含义，以及社区插件发布时要准备的文件。',
+      href: 'https://blog.csdn.net/lyx_2016/article/details/156248736',
+    },
+    {
+      title: '用Puppeteer实现PDF文档导出分页功能',
+      date: 'Nov 13, 2025',
+      dateTime: '2025-11-13',
+      tags: ['React', 'Puppeteer', 'PDF'],
+      summary:
+        '从 react-pdf 的中文字体与分页问题，转到参考 magic-resume：抽取页面 HTML/CSS 由后端 Puppeteer 渲染导出 PDF。',
+      href: 'https://blog.csdn.net/lyx_2016/article/details/154787139',
     },
   ];
 
@@ -747,8 +806,13 @@ function ProjectsPage() {
       <section className="mx-auto max-w-7xl px-6 py-16 md:px-10 md:py-24">
         <div className="mb-10 flex items-end justify-between gap-6">
           <div>
-            <div className="text-xs uppercase tracking-[0.28em] text-[#5BAEE6]">Graphics Projects</div>
-            <h2 className="mt-3 text-3xl font-semibold tracking-[-0.03em] md:text-5xl">Rendered like distant peaks.</h2>
+            <Link
+              to="/"
+              className="inline-block text-xs uppercase tracking-[0.28em] text-[#5BAEE6] transition-colors hover:text-[#1E7FBF]"
+            >
+              ← Home
+            </Link>
+            <h2 className="mt-3 text-3xl font-semibold tracking-[-0.03em] md:text-5xl">Graphics Projects</h2>
           </div>
           <div className="hidden max-w-md text-sm leading-7 text-[#3A4653] md:block">
             Large visual cards, restrained text, and a gallery rhythm that lets images breathe like landscape scrolls.
@@ -807,16 +871,50 @@ function ProjectsPage() {
 
       <section className="mx-auto max-w-7xl px-6 py-16 md:px-10 md:py-24">
         <div className="mb-10">
-          <div className="text-xs uppercase tracking-[0.28em] text-[#5BAEE6]">AI-Related Projects</div>
-          <h2 className="mt-3 text-3xl font-semibold tracking-[-0.03em] md:text-5xl">Intelligence drifting through fog.</h2>
+          <div className="text-xs uppercase tracking-[0.28em] text-[#5BAEE6]">Apps & Plugins</div>
+          <h2 className="mt-3 text-3xl font-semibold tracking-[-0.03em] md:text-5xl">Shipped tools you can open today.</h2>
         </div>
         <div className="grid gap-6 md:grid-cols-3">
           {ai.map((item) => (
             <article key={item.title} className="rounded-[28px] border border-[#1E2328]/8 bg-[#F4FAFE]/72 p-6 shadow-[0_16px_50px_rgba(40,55,70,0.05)] backdrop-blur-sm">
+              {item.cover ? (
+                <div className="relative mb-5 overflow-hidden rounded-[24px] bg-[linear-gradient(180deg,rgba(189,224,247,0.32),rgba(245,246,244,0.95))] aspect-video">
+                  <img
+                    src={item.cover}
+                    alt={item.title}
+                    loading="lazy"
+                    className="absolute inset-0 h-full w-full object-contain object-top"
+                  />
+                </div>
+              ) : null}
               <div className="mb-4 h-px w-14 bg-[#5BAEE6]/50" />
               <h3 className="text-2xl tracking-[-0.03em]">{item.title}</h3>
               <p className="mt-2 text-sm text-[#1E7FBF]">{item.meta}</p>
               <p className="mt-4 text-sm leading-7 text-[#3A4653]">{item.desc}</p>
+              {(item.href || item.repo) && (
+                <div className="mt-5 flex flex-wrap gap-4 text-sm font-medium">
+                  {item.href ? (
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[#1E7FBF] underline decoration-[#1E7FBF]/35 underline-offset-4 transition hover:text-[#155a8a]"
+                    >
+                      Live site
+                    </a>
+                  ) : null}
+                  {item.repo ? (
+                    <a
+                      href={item.repo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[#1E7FBF] underline decoration-[#1E7FBF]/35 underline-offset-4 transition hover:text-[#155a8a]"
+                    >
+                      GitHub README
+                    </a>
+                  ) : null}
+                </div>
+              )}
             </article>
           ))}
         </div>
@@ -827,31 +925,63 @@ function ProjectsPage() {
 
 function TechBlogsPage() {
   return (
-    <section className="mx-auto max-w-7xl px-6 py-16 md:px-10 md:py-24">
-      <div className="mb-10">
-        <div className="text-xs uppercase tracking-[0.28em] text-[#5BAEE6]">Tech Blogs</div>
-        <h2 className="mt-3 text-3xl font-semibold tracking-[-0.03em] md:text-5xl">Written on rain-washed paper.</h2>
-        <p className="mt-4 max-w-2xl text-base leading-8 text-[#3A4653]">
-          Longer write-ups in Chinese often live on CSDN; cards below open the full article in a new tab.
+    <section className="mx-auto max-w-5xl px-6 py-16 md:px-10 md:py-24">
+      <header className="border-b border-[#1E2328]/10 pb-10">
+        <Link
+          to="/"
+          className="inline-block text-xs uppercase tracking-[0.28em] text-[#5BAEE6] transition-colors hover:text-[#1E7FBF]"
+        >
+          ← Home
+        </Link>
+        <h1 className="mt-6 text-3xl font-semibold tracking-tight text-[#1E2328] md:text-4xl">Blogs</h1>
+        <p className="mt-3 max-w-xl text-[15px] leading-7 text-[#475569]">
+          Engineering notes and write-ups; full posts are on CSDN (Chinese). Click a row to open in a new tab.
         </p>
-      </div>
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {techBlogPosts.map((item, i) => (
-          <a
-            key={item.href}
-            href={item.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block rounded-[28px] border border-[#1E2328]/8 bg-white/60 p-6 shadow-[0_16px_50px_rgba(40,55,70,0.05)] backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:bg-white/72 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E7FBF]/45"
-          >
-            <div className="text-xs uppercase tracking-[0.22em] text-[#5BAEE6]">Post 0{i + 1}</div>
-            <h3 className="mt-3 text-xl font-medium tracking-[-0.03em] text-[#1E2328] md:text-2xl">{item.title}</h3>
-            <p className="mt-2 text-sm text-[#1E7FBF]">{item.meta}</p>
-            <p className="mt-4 text-sm leading-7 text-[#3A4653]">{item.summary}</p>
-            <p className="mt-5 text-xs font-medium uppercase tracking-[0.18em] text-[#5BAEE6]">Read on CSDN →</p>
-          </a>
+      </header>
+
+      <ol className="mt-0 list-none p-0">
+        {techBlogPosts.map((item) => (
+          <li key={item.href} className="border-b border-[#1E2328]/10 last:border-b-0">
+            <a
+              href={item.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex flex-col gap-3 rounded-lg py-10 transition-colors hover:bg-[#1E2328]/[0.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E7FBF]/35 focus-visible:ring-offset-2 sm:flex-row sm:gap-10 sm:px-3 sm:py-10"
+            >
+              <time
+                dateTime={item.dateTime}
+                className="shrink-0 font-[family-name:var(--font-mono)] text-[13px] font-medium tabular-nums tracking-tight text-[#64748B] sm:w-[7.5rem] sm:pt-1"
+              >
+                {item.date}
+              </time>
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-baseline justify-between gap-2">
+                  <h2 className="text-[1.125rem] font-semibold leading-snug tracking-tight text-[#0F172A] transition-colors group-hover:text-[#1E7FBF] md:text-xl">
+                    {item.title}
+                    <span className="ml-1 inline text-[#94A3B8] opacity-0 transition-opacity group-hover:opacity-100" aria-hidden="true">
+                      ↗
+                    </span>
+                  </h2>
+                </div>
+                <div className="mt-2 flex flex-wrap items-center gap-2">
+                  <span className="rounded-md border border-[#1E2328]/10 bg-[#F8FAFC] px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-[#64748B]">
+                    CSDN
+                  </span>
+                  {item.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-md bg-[#EEF6FC] px-2 py-0.5 text-[12px] font-medium text-[#1E7FBF]/90"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <p className="mt-3 text-[15px] leading-relaxed text-[#475569]">{item.summary}</p>
+              </div>
+            </a>
+          </li>
         ))}
-      </div>
+      </ol>
     </section>
   );
 }
@@ -1146,7 +1276,7 @@ function GraphicsTutorialDetailPage() {
     <section className="mx-auto max-w-7xl px-6 py-16 md:px-10 md:py-24">
       <Link
         to="/"
-        className="inline-block text-sm tracking-wide text-[#1E7FBF] transition-colors hover:text-[#0f5f96]"
+        className="inline-block text-xs uppercase tracking-[0.28em] text-[#5BAEE6] transition-colors hover:text-[#1E7FBF]"
       >
         ← Home
       </Link>
