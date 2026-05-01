@@ -16,6 +16,16 @@ import { getTutorialBySlug, tutorialDetails } from './tutorialContent.js';
 import { createComment, createProfile, getProfile, listComments } from './commentApi.js';
 import { isSupabaseConfigured, supabase } from './supabaseClient.js';
 
+/** Root-relative public URLs respect Vite `base` (e.g. GitHub Pages project sites). */
+function publicAsset(path) {
+  if (typeof path !== 'string') return path;
+  if (/^https?:\/\//i.test(path)) return path;
+  if (!path.startsWith('/')) return path;
+  const base = import.meta.env.BASE_URL;
+  if (base === '/') return path;
+  return `${base.replace(/\/$/, '')}${path}`;
+}
+
 const nav = [
   { label: 'Projects', path: '/projects' },
   { label: 'Tech blogs', path: '/tech-blogs' },
@@ -30,63 +40,63 @@ const graphics = [
       slug: "monster-mash",
       meta: "Sketch-based Modeling · ARAP · Deformation · Animation",
       desc: "A reproduction study of Google Research's Monster Mash workflow, from 2D sketch construction to layered deformation and interactive character animation.",
-      cover: "/images/projects/monster-mash/image-1.png",
+      cover: publicAsset('/images/projects/monster-mash/image-1.png'),
     },
     {
       title: "A Small Firework",
       slug: "a-small-firework",
       meta: "Three.js · Web Audio · GLSL · Particles · Procedural Art",
       desc: "Interactive particle fireworks and a shader-driven handheld sparkler in the browser, with synthesized launch, bloom, drift, scatter, and crackle sounds.",
-      cover: "/images/projects/a-small-firework.gif",
+      cover: publicAsset('/images/projects/a-small-firework.gif'),
     },
     {
       title: "Stippling Studio",
       slug: "stippling",
       meta: "NPR · Geometry Processing · Video Stylization · Reconstruction",
       desc: "A stippling-focused graphics project spanning weighted LBG, video stylization, multi-class stippling, color stippling, and learning-based reconstruction.",
-      cover: "/images/projects/stippling/cover.png",
+      cover: publicAsset('/images/projects/stippling/cover.png'),
     },
     {
       title: "Luminary Studio",
       slug: "luminary",
       meta: "Realtime Graphics · OpenGL · Particles · Physics",
       desc: "A real-time Kongming lantern simulation with mesh rendering, particle flame effects, and atmospheric night-scene visuals.",
-      cover: "/images/projects/luminary/290371995-18363e4a-ea63-48aa-bbc0-dfb1ee8d89a2.png",
+      cover: publicAsset('/images/projects/luminary/290371995-18363e4a-ea63-48aa-bbc0-dfb1ee8d89a2.png'),
     },
     {
       title: "Tea for Two - Flight Edition",
       slug: "teafortwoflightedition",
       meta: "Realtime Graphics · OpenGL · Stylized Rendering",
       desc: "A real-time first-person flight graphics final project featuring procedural terrain and water, shadow mapping, portal rendering, and stylized post-processing effects.",
-      cover: "/images/projects/tea-for-two-flight-edition-cover.png",
+      cover: publicAsset('/images/projects/tea-for-two-flight-edition-cover.png'),
     },
     {
       title: "Path Tracer",
       slug: "path-tracer",
       meta: "Rendering · BRDF · Global Illumination",
       desc: "An unbiased Monte Carlo path tracer that numerically solves the rendering equation to produce photorealistic images featuring soft shadows, color bleeding, caustics, and refraction.",
-      cover: "/images/projects/path-tracer/refraction.png",
+      cover: publicAsset('/images/projects/path-tracer/refraction.png'),
     },
     {
       title: "ARAP Mesh Deformation",
       slug: "arap",
       meta: "Geometry Processing · Sparse Solver · Interactive",
       desc: "As-Rigid-As-Possible surface modeling with cotangent Laplacians, SVD rotations, and a cached Cholesky solver — drag a vertex and watch the mesh respond like it has bones.",
-      cover: "/images/projects/arap/armadillo.gif",
+      cover: publicAsset('/images/projects/arap/armadillo.gif'),
     },
     {
       title: "Half-Edge Mesh Toolkit",
       slug: "mesh",
       meta: "Geometry Processing · Half-Edge · Loop · QEM · Remesh",
       desc: "Atomic edge ops in amortized O(1), Loop subdivision, quadric-error simplification, isotropic remeshing, and bilateral denoising — all validated on a half-edge mesh with hashed lookups.",
-      cover: "/images/projects/mesh/simplify-cow.png",
+      cover: publicAsset('/images/projects/mesh/simplify-cow.png'),
     },
     {
       title: "Real-Time FEM Soft-Body Simulation",
       slug: "sim-fem",
       meta: "Physics Simulation · FEM · Collision · OpenMP",
       desc: "Tetrahedral finite-element soft-body simulation with StVK elasticity, damping, collision handling, and interactive mouse-driven manipulation in real time.",
-      cover: "/images/projects/sim-fem/ezgif-4adbeb9cbe3097af.gif",
+      cover: publicAsset('/images/projects/sim-fem/ezgif-4adbeb9cbe3097af.gif'),
     },
   ];
 
@@ -97,14 +107,14 @@ const ai = [
       desc: "A zero-dependency, single-file web translator: six languages via DeepL and LibreTranslate, optional Vercel proxy so API keys never ship to the client, and read-aloud through the browser’s Web Speech API. Open index.html locally or deploy to any static host.",
       href: "https://mt-translator.vercel.app/",
       repo: "https://github.com/Ahhhh2016/multi-translator",
-      cover: "/images/projects/multi-translator.jpg",
+      cover: publicAsset('/images/projects/multi-translator.jpg'),
     },
     {
       title: "DeskPet Seiko",
       meta: "Godot 4 · GDScript · Qwen API · macOS",
       desc: "An AI desktop pet: chat beside the pet with qwen-plus, study mode with a Pomodoro-style focus timer, idle sleep, drag to reposition, and settings for API keys and sound. Ships as a macOS .dmg (first launch may require “Open Anyway” in Gatekeeper).",
       repo: "https://github.com/Ahhhh2016/DeskPet-Seiko",
-      cover: "/images/projects/deskpet.jpg",
+      cover: publicAsset('/images/projects/deskpet.jpg'),
     },
     {
       title: "WeekWise Training Plan",
@@ -112,14 +122,14 @@ const ai = [
       desc: "Chat with an AI fitness coach to generate a personalized 7-day training plan, edit slots inline, track daily completion, and print an A4-friendly layout. Bilingual UI (English / 中文).",
       href: "https://weekwise-trainingplan.vercel.app/",
       repo: "https://github.com/Ahhhh2016/weekwise-trainingplan",
-      cover: "/images/projects/weekplan.jpg",
+      cover: publicAsset('/images/projects/weekplan.jpg'),
     },
     {
       title: "PomoKanban",
       meta: "Obsidian · TypeScript · Pomodoro · Kanban",
       desc: "A Pomodoro-enhanced Kanban plugin for Obsidian: markdown boards, integrated timers and stopwatch, automatic breaks and auto-rounds, per-card time logs, due dates, and estimates — install as “Pomodoro Kanban” from Community Plugins.",
       repo: "https://github.com/Ahhhh2016/pomokanban",
-      cover: "/images/projects/pomokanban.jpg",
+      cover: publicAsset('/images/projects/pomokanban.jpg'),
     },
     {
       title: "梦搭AI",
@@ -127,7 +137,7 @@ const ai = [
       desc: "A web companion for job search and career prep (Pony Resume). Browse and use the product online; source and collaboration live on GitHub.",
       href: "http://mengdaai.com/",
       repo: "https://github.com/xiyu97gogo/pony_resume",
-      cover: "/images/projects/mengdaai.jpg",
+      cover: publicAsset('/images/projects/mengdaai.jpg'),
     },
   ];
 
@@ -297,7 +307,7 @@ const markdownComponents = {
     return (
       <figure className="mt-6">
         <img
-          src={cleanSrc}
+          src={publicAsset(cleanSrc)}
           alt={alt || ''}
           loading="lazy"
           style={inlineStyle}
@@ -723,7 +733,7 @@ function HomePage() {
     };
 
     try {
-      const audio = new Audio('/name.m4a');
+      const audio = new Audio(publicAsset('/name.m4a'));
       audio.onended = () => setIsPlayingName(false);
       audio.onerror = () => fallbackToSpeech();
       const playPromise = audio.play();
@@ -1106,7 +1116,7 @@ function AboutPage() {
           </div>
           <div className="relative min-h-[280px] overflow-hidden rounded-[28px] bg-[linear-gradient(180deg,rgba(189,224,247,0.22),rgba(245,246,244,0.96))]">
             <img
-              src="/about.jpg"
+              src={publicAsset('/about.jpg')}
               alt="Yixuan in front of a lake and mountains"
               loading="lazy"
               className="absolute inset-0 h-full w-full object-cover"
@@ -1419,7 +1429,7 @@ function PortfolioLayout() {
             aria-label="Yixuan Liu — home"
           >
             <img
-              src="/favicon.svg"
+              src={publicAsset('/favicon.svg')}
               alt=""
               aria-hidden="true"
               className="h-7 w-7 shrink-0 rounded-[6px] shadow-sm"
@@ -1462,8 +1472,9 @@ function PortfolioLayout() {
 }
 
 export default function RainyMountainPortfolio() {
+  const routerBasename = import.meta.env.BASE_URL.replace(/\/$/, '');
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={routerBasename || undefined}>
       <PortfolioLayout />
     </BrowserRouter>
   );

@@ -1,0 +1,64 @@
+# Build Vite app and deploy to GitHub Pages (Settings → Pages → Source: GitHub Actions).
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: blog-app/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci --prefix blog-app
+
+      # User/org site: repo named <owner>.github.io → site root "/".
+      # Otherwise project site: "/<repo>/".
+      - name: Set Vite base path
+        run: |
+          OWNER="${{ github.repository_owner }}"
+          NAME="${{ github.event.repository.name }}"
+          if [ "$NAME" = "$OWNER.github.io" ]; then
+            echo "VITE_BASE=/" >> "$GITHUB_ENV"
+          else
+            echo "VITE_BASE=/$NAME/" >> "$GITHUB_ENV"
+          fi
+
+      - name: Build
+        run: npm run build --prefix blog-app
+
+      # SPA deep links on GitHub Pages (otherwise refresh on /projects/... returns 404).
+      - name: SPA fallback
+        run: cp blog-app/dist/index.html blog-app/dist/404.html
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: blog-app/dist
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/deploy-pages@v4
+        id: deployment
