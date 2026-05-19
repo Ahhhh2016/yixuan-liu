@@ -44,16 +44,16 @@ Each frame, the simulator advances the deformable mesh by computing per-tetrahed
 
 Demonstration scenes cover ground contact across multiple geometries (tet, cube, sphere, ellipsoid), sphere-obstacle collisions, and live interactive drag — all running in real time.
 
-![Ground contact — single tetrahedron](/images/projects/sim-fem/ground_tet.gif)
+![Ground contact — single tetrahedron](/images/projects/sim-fem/tet.gif)
 
-![Ground contact — cube](/images/projects/sim-fem/ground_cube.gif)
+![Ground contact — cube](/images/projects/sim-fem/cube.gif)
 
-![Ground contact — sphere](/images/projects/sim-fem/ground_sphere.gif)
+![Ground contact — sphere](/images/projects/sim-fem/sphere.gif)
 
-![Ground contact — ellipsoid](/images/projects/sim-fem/ground_ellipsoid.gif)
+![Ground contact — ellipsoid](/images/projects/sim-fem/ellipsoid.gif)
 
-![Sphere-obstacle collision — cube](/images/projects/sim-fem/sphere_collision_cube.gif)
+![Sphere-obstacle collision — cube](/images/projects/sim-fem/ezgif-2c7f46c4a9e8fa54.gif)
 
-![Sphere-obstacle collision — sphere](/images/projects/sim-fem/sphere_collision_sphere.gif)
+![Sphere-obstacle collision — sphere](/images/projects/sim-fem/sphere2.gif)
 
-![Interactive drag with spring–damper coupling](/images/projects/sim-fem/interactive_drag.gif)
+![Interactive drag with spring–damper coupling](/images/projects/sim-fem/drag.gif)
