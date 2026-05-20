@@ -561,7 +561,7 @@ function CommentsSection({ contentType, slug }) {
   return (
     <section className="mt-10 rounded-[24px] border border-[#1E2328]/8 bg-white/65 p-6 shadow-[0_12px_40px_rgba(40,55,70,0.05)]">
       <h2 className="text-xl font-semibold tracking-[-0.02em] text-[#1E2328]">评论</h2>
-      <p className="mt-2 text-sm text-[#3A4653]">支持评论与回复。登录后即可发布，用户名全站唯一。</p>
+      <p className="mt-2 text-sm text-[#3A4653]">支持评论与回复。输入邮箱即可发布，用户名全站唯一。</p>
 
       {!isSupabaseConfigured && (
         <div className="mt-5 rounded-xl border border-[#e0b7b7] bg-[#fff3f3] px-4 py-3 text-sm text-[#9a3f3f]">
