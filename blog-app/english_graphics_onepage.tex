@@ -1,0 +1,103 @@
+% !TEX program = xelatex
+\documentclass[10pt]{article}
+\usepackage[a4paper, left=0.42in, right=0.42in, top=0.30in, bottom=0.25in]{geometry}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{setspace}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+\hypersetup{colorlinks=true,urlcolor=black,linkcolor=black}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setstretch{1.05}
+\setlist[itemize]{leftmargin=1.15em, topsep=0.11em, itemsep=0.06em, parsep=0em}
+\titleformat{\section}{\normalsize\bfseries}{}{0em}{}[\titlerule]
+\titlespacing*{\section}{0pt}{0.46em}{0.22em}
+
+\newcommand{\entry}[4]{\textbf{#1}\hfill #2\\\textit{#3}\hfill\textit{#4}\vspace{0.07em}}
+\newcommand{\project}[3]{\vspace{0.18em}\textbf{#1}\hfill #2\\\textit{#3}\vspace{0.04em}}
+
+\begin{document}
+\small
+
+\begin{center}
+  {\Large \textbf{Yixuan Liu}}\\[-0.03em]
+  \href{mailto:yixuan_liu1@brown.edu}{yixuan\_liu1@brown.edu}
+  \quad|\quad (+86) 18669662539
+  \quad|\quad \href{https://github.com/Ahhhh2016}{github.com/Ahhhh2016}
+  \quad|\quad \href{https://www.linkedin.com/in/yixuan-liu1/}{linkedin.com/in/yixuan-liu1/}\\[0.02em]
+  \textbf{Computer Graphics \,|\, Visual Computing \,|\, Rendering Engineering \,|\, AI Applications}
+\end{center}
+
+\section*{Education}
+\entry{Brown University}{Providence, RI, USA}{M.S. in Computer Science, Visual Computing}{Sep 2023 -- Dec 2026 (Expected)}
+\begin{itemize}
+  \item Relevant Coursework: Computer Graphics, Computer Vision, Deep Learning, Artificial Intelligence
+\end{itemize}
+\entry{Southwest Jiaotong University}{Chengdu, China}{B.S. in Computer Science and Technology}{Sep 2019 -- Jul 2023}
+\begin{itemize}
+  \item GPA: 3.6/4.0; Second-Class Scholarship (top 5\%); CCPC 2021 Bronze Medal (Women's Group); Sichuan Collegiate Programming Contest Silver Medal
+\end{itemize}
+\entry{University of Leeds}{Leeds, UK}{Sino-UK Joint Degree Program in Computer Science}{Sep 2019 -- Jul 2023}
+
+\section*{Technical Skills}
+\textbf{Languages:} C/C++, Python, JavaScript/TypeScript, Java, GLSL, SQL\\
+\textbf{Graphics:} OpenGL, Qt, Eigen, Three.js, WebGL/GLSL, Ray/Path Tracing, BRDF, Monte Carlo Sampling, Shadow Mapping, Post-processing\\
+\textbf{Geometry/Simulation:} Half-edge Mesh, Loop Subdivision, QEM, Isotropic Remeshing, Bilateral Denoising, BVH\\
+\textbf{Engineering:} React, Vue3, Vite, Quarkus, Docker, Kubernetes, Redis, Git, CMake, OpenMP
+
+\section*{Selected Graphics Projects}
+\project{Physically-Based Monte Carlo Path Tracer}{Brown CSCI 2240}{C++17 / Eigen / Qt 6 / OpenMP / BVH / tinyobjloader}
+\begin{itemize}
+  \item Built a Monte Carlo path tracer from scratch, solving the rendering equation for soft shadows, color bleeding, caustics, mirrors, and dielectric refraction.
+  \item Added next-event estimation, adaptive Russian Roulette, cosine-weighted / Phong-lobe importance sampling, BVH acceleration, and OpenMP row scheduling.
+\end{itemize}
+
+\project{Half-Edge Mesh Geometry Processing Toolkit}{Brown CSCI 2240}{C++17 / Eigen / Qt 6 / Half-edge Mesh / tinyobjloader}
+\begin{itemize}
+  \item Implemented OBJ IO, Loop subdivision, QEM simplification, isotropic remeshing, and bilateral mesh denoising on a custom half-edge mesh.
+  \item Used hash-indexed halfedges/edges for amortized $O(1)$ edge flip/split/collapse access; validated topology with 11 invariant checks.
+\end{itemize}
+
+\project{Interactive ARAP Mesh Deformation}{Brown CSCI 2240}{C++17 / Eigen / Qt 6 / OpenGL / SimplicialLLT / SVD}
+\begin{itemize}
+  \item Implemented real-time ARAP anchor/drag deformation with SVD local rotations, sparse global solves, and cached Cholesky factorizations for interactive editing.
+\end{itemize}
+
+\project{Real-Time FEM Soft-Body Simulation}{Brown CSCI 2240}{C++17 / Eigen / Qt 6 / OpenMP / Tetrahedral FEM}
+\begin{itemize}
+  \item Built a real-time tetrahedral soft-body simulator with StVK elasticity, damping, gravity, ground/sphere collisions, and mouse-driven manipulation.
+  \item Computed deformation gradients, Green strain, and stresses per frame; advanced dynamics with midpoint integration and two-stage contact handling.
+\end{itemize}
+
+\project{Tea for Two - Flight Edition}{Real-Time Graphics Final Project}{C++17 / OpenGL / GLSL / Qt / Perlin Noise / Shadow Mapping}
+\begin{itemize}
+  \item Built a first-person flight experience with procedural terrain/water, portal rendering, PCF shadows, and GLSL stylized effects including toon shading, outlines, fog, and motion blur.
+\end{itemize}
+
+\section*{Experience}
+\entry{\href{https://www.meituan.com/}{Meituan}}{Beijing, China}{Site Reliability Engineering Intern}{Apr 2025 -- Jun 2025}
+\begin{itemize}
+  \item Supported SRE operations through cross-region disaster-recovery research, alerting-script automation, and monitoring/log-analysis workflows.
+\end{itemize}
+
+\entry{\href{https://asycuda.org/en/}{UN Trade \& Development -- ASYCUDA}}{Geneva, Switzerland}{Software Engineering Intern}{May 2024 -- Nov 2024}
+\begin{itemize}
+  \item Developed Quarkus backend services and reusable Vue 3 components; contributed to Docker/Kubernetes-based CI/CD delivery.
+  \item Implemented JasperReports PDF export and migrated i18n mappings from JSON configuration to backend entity annotations.
+\end{itemize}
+
+\entry{\href{http://mengdaai.com/}{Mengda AI}}{Remote}{Co-founder / Full-stack Developer}{Jul 2025 -- Present}
+\begin{itemize}
+  \item Co-built an AI resume platform from 0 to 1, supporting editing, AI assistance, PDF export, JWT auth, analytics, and 200+ users.
+  \item Built the editor UI with React/TypeScript/Vite/Tailwind; developed Flask + SQLAlchemy REST APIs and integrated Coze workflows.
+\end{itemize}
+
+\section*{Writing and Additional Projects}
+\begin{itemize}
+  \item Maintain a personal website and the Chinese tutorial series \textit{Graphics After Tea}; additional work includes Stippling Studio, Monster Mash Reproduction, A Small Firework, and PomoKanban.
+\end{itemize}
+
+\end{document}

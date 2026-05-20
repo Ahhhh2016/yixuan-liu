@@ -1,0 +1,111 @@
+% !TEX program = xelatex
+\documentclass[10pt,fontset=none]{ctexart}
+\usepackage[a4paper, left=0.36in, right=0.36in, top=0.24in, bottom=0.18in]{geometry}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{setspace}
+
+\setCJKmainfont{Songti SC}
+\setCJKsansfont{PingFang SC}
+\setCJKmonofont{PingFang SC}
+
+\hypersetup{colorlinks=true,urlcolor=black,linkcolor=black}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setstretch{0.98}
+\setlist[itemize]{leftmargin=1.05em, topsep=0.05em, itemsep=0.02em, parsep=0em}
+\titleformat{\section}{\normalsize\bfseries}{}{0em}{}[\titlerule]
+\titlespacing*{\section}{0pt}{0.36em}{0.20em}
+
+\newcommand{\entry}[4]{\textbf{#1}\hfill #2\\\textit{#3}\hfill\textit{#4}}
+\newcommand{\project}[3]{\textbf{#1}\hfill #2\\\textit{#3}}
+
+\begin{document}
+\small
+
+\begin{center}
+  {\Large \textbf{刘奕萱}}\\[-0.05em]
+  \href{mailto:yixuan_liu1@brown.edu}{yixuan\_liu1@brown.edu}
+  \quad|\quad (+86) 18669662539
+  \quad|\quad \href{https://github.com/Ahhhh2016}{github.com/Ahhhh2016}
+  \quad|\quad \href{https://www.linkedin.com/in/yixuan-liu1/}{linkedin.com/in/yixuan-liu1/}\\[-0.05em]
+  \textbf{求职方向：计算机图形学 / 可视计算 / 渲染开发 / AI 应用开发}
+\end{center}
+
+\section*{教育经历}
+\entry{布朗大学}{美国 普罗维登斯}{计算机科学硕士，Visual Computing 方向}{09/2023 -- 12/2026（预计）}
+\begin{itemize}
+  \item 相关课程：计算机图形学、计算机视觉、深度学习、人工智能
+\end{itemize}
+\entry{西南交通大学}{四川 成都}{计算机科学与技术学士}{09/2019 -- 07/2023}
+\begin{itemize}
+  \item GPA：3.6/4.0；二等奖学金（前 5\%）；中国大学生程序设计竞赛 2021 铜奖（女子组）、四川省大学生程序设计竞赛银奖
+\end{itemize}
+
+\section*{专业技能}
+\textbf{语言：} C/C++, Python, JavaScript/TypeScript, Java, GLSL, SQL\\
+\quad
+\textbf{图形学：} OpenGL, Qt, Eigen, Three.js, WebGL/GLSL, Ray Tracing, Path Tracing, BRDF, Monte Carlo Sampling, Shadow Mapping, Post-processing\\
+\textbf{几何/仿真：} Half-edge Mesh, Loop Subdivision, QEM, Isotropic Remeshing, Bilateral Denoising, BVH\\
+\quad
+\textbf{工程：} React, Vue3, Vite, Quarkus, Docker, Kubernetes, Redis, Git, CMake, OpenMP
+
+\section*{图形学与可视计算项目}
+\project{Physically-Based Monte Carlo Path Tracer}{Brown CSCI 2240}{C++17 / Eigen / Qt 6 / OpenMP / BVH / tinyobjloader}
+\begin{itemize}
+  \item 从零实现基于 Monte Carlo 的 path tracer，递归求解 rendering equation，支持 soft shadows、color bleeding、caustics、mirror reflection 与 dielectric refraction。
+  \item 实现 next event estimation、adaptive Russian Roulette、cosine-weighted hemisphere sampling 与 Phong-lobe importance sampling，降低采样方差。
+  \item 支持 Lambertian、normalized Phong glossy、ideal mirror、dielectric refraction 四类 BRDF；使用 OpenMP 动态行调度与 BVH 加速求交。
+\end{itemize}
+
+\project{Half-Edge Mesh Geometry Processing Toolkit}{Brown CSCI 2240}{C++17 / Eigen / Qt 6 / Half-edge Mesh / tinyobjloader}
+\begin{itemize}
+  \item 基于自定义 half-edge 结构实现 OBJ 读写、Loop subdivision、QEM simplification、isotropic remeshing 与 bilateral mesh denoising。
+  \item 使用 directed halfedge 与 undirected edge 哈希索引，使 edge flip/split/collapse 达到均摊 $O(1)$ 访问与局部更新。
+  \item 编写 11 项 mesh invariant validator，覆盖 twin/next 一致性、one-ring 拓扑、edge-halfedge 映射等，降低复杂几何操作错误。
+\end{itemize}
+
+\project{Interactive ARAP Mesh Deformation}{Brown CSCI 2240}{C++17 / Eigen / Qt 6 / OpenGL / SimplicialLLT / SVD}
+\begin{itemize}
+  \item 实现 ARAP surface modeling，支持实时 anchor/drag 顶点并保持局部刚性；通过 SVD 求解 best-fit rotation，再解 sparse linear system 更新位置。
+  \item 对 fixed anchors 后的 reduced Laplacian 做 Cholesky 预分解与缓存，拖拽中复用 factorization，提升交互帧率；在 teapot、armadillo、peter.obj 等网格上验证。
+\end{itemize}
+
+\project{Real-Time FEM Soft-Body Simulation}{Brown CSCI 2240}{C++17 / Eigen / Qt 6 / OpenMP / Tetrahedral FEM}
+\begin{itemize}
+  \item 基于四面体网格实现实时 deformable solid simulation，支持 StVK elasticity、viscous damping、gravity、ground/sphere collision 与鼠标拖拽交互。
+  \item 每帧计算 deformation gradient、Green strain 与 stress，使用 explicit midpoint method 推进；设计 penalty force + position projection 两阶段接触处理。
+\end{itemize}
+
+\project{Tea for Two - Flight Edition}{实时图形学 Final Project}{C++17 / OpenGL / GLSL / Qt / Perlin Noise / Shadow Mapping}
+\begin{itemize}
+  \item 构建第一人称实时飞行体验，包含 procedural terrain/water、cartoon-space、portal rendering 与 stylized post-processing。
+  \item 实现 geometry pass、shadow pass 与后处理链路；使用 light-space depth map + PCF 生成阴影，用 GLSL 参数化 toon、edge outline、fog、motion blur 等效果。
+\end{itemize}
+
+\section*{实习与创业经历}
+\entry{\href{https://asycuda.org/en/}{联合国贸易与发展会议 - ASYCUDA}}{瑞士 日内瓦}{软件开发实习生}{05/2024 -- 11/2024}
+\begin{itemize}
+  \item 使用 Quarkus 开发 Java 后端微服务，基于 Vue 3 实现高复用前端组件，并参与 Docker/Kubernetes 容器化部署与 CI/CD 流程。
+  \item 基于 JasperReports 实现 PDF 报表导出，对接模板与业务数据；优化 i18n 多语言映射，将 JSON 配置迁移为后端 entity annotation 驱动。
+\end{itemize}
+
+\entry{\href{https://www.meituan.com/}{美团}}{中国 北京}{运维开发实习生}{04/2025 -- 06/2025}
+\begin{itemize}
+  \item 参与跨地域防灾调研与稳定性运营，梳理故障场景和保障方案；编写日常告警提示脚本，辅助监控告警与日志排查流程。
+\end{itemize}
+
+\entry{\href{http://mengdaai.com/}{梦搭AI}}{远程}{联合创始人 / 全栈开发}{07/2025 -- 至今}
+\begin{itemize}
+  \item 参与从 0 到 1 搭建前后端分离的 AI 智能简历平台，支持简历编辑、AI 辅助生成、PDF 导出、JWT 认证与后台数据分析，累计服务 200+ 用户。
+  \item 使用 React + TypeScript + Vite + Tailwind 实现编辑器与交互状态管理；Flask + SQLAlchemy 提供 REST API，并对接 Coze 工作流做简历诊断与经历生成。
+\end{itemize}
+
+\section*{技术写作与其他项目}
+\begin{itemize}
+  \item 维护个人网站与《茶余饭后图形学》中文教程，覆盖 2D graphics、颜色表示、图像存储、卷积与傅立叶变换等主题。
+  \item 其他项目：Stippling Studio、Monster Mash Reproduction、A Small Firework、PomoKanban等。
+\end{itemize}
+
+\end{document}
