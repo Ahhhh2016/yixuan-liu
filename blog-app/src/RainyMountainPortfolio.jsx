@@ -792,7 +792,7 @@ function HomePage() {
                 <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
               </svg>
             </button>
-            , who learns computer graphics, AI, and builds applications.
+            , a graphics-focused software engineer building real-time visual systems and AI-powered applications.
           </span>
         </h1>
       </div>
