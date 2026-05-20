@@ -1024,7 +1024,8 @@ function NovelsPage() {
         <div className="text-xs uppercase tracking-[0.28em] text-[#5BAEE6]">Novels</div>
         <h1 className="mt-3 text-3xl font-semibold text-[#1E2328] md:text-5xl">《未定义行为》</h1>
         <p className="mt-4 text-base leading-8 text-[#3A4653]">
-          一部技术悬疑单元剧。每集一个系统事故，每个 bug 背后都有一次没有被定义的决定。霍珀修别人修不了的东西，林爱达在每周三下午四点问她无法绕开的那个问题。第一季每周三 16:00（中国时间）更新。
+          一部技术悬疑单元剧。每集一个系统事故，每个 bug 背后都有一次没有被定义的决定。
+          霍珀修别人修不了的东西，林爱达在每周三下午四点问她无法绕开的那个问题。第一季每周三 16:00（中国时间）更新。
         </p>
       </div>
 
