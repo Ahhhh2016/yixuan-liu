@@ -13,6 +13,7 @@ import rehypeUnwrapImages from 'rehype-unwrap-images';
 import { BrowserRouter, Link, Navigate, Route, Routes, useParams } from 'react-router-dom';
 import { getProjectBySlug } from './projectContent.js';
 import { getTutorialBySlug, tutorialDetails } from './tutorialContent.js';
+import { getNovelBySlug, novelDetails } from './novelContent.js';
 import { createComment, createProfile, getProfile, listComments } from './commentApi.js';
 import { isSupabaseConfigured, supabase } from './supabaseClient.js';
 
@@ -319,6 +320,19 @@ const markdownComponents = {
       </figure>
     );
   },
+};
+
+const novelMarkdownComponents = {
+  ...markdownComponents,
+  h1: ({ children }) => <h1 className="mt-10 text-3xl font-semibold text-[#1E2328] md:text-4xl">{children}</h1>,
+  h2: ({ children }) => <h2 className="mt-8 text-2xl font-semibold text-[#1E2328] md:text-3xl">{children}</h2>,
+  p: ({ children }) => <p className="mt-5 text-[17px] leading-9 text-[#283540] md:text-[18px]">{children}</p>,
+  blockquote: ({ children }) => (
+    <blockquote className="mt-6 border-l-2 border-[#1E7FBF]/35 bg-[#F4FAFE]/70 py-1 pl-5 text-[#3A4653]">
+      {children}
+    </blockquote>
+  ),
+  hr: () => <div className="my-10 h-px w-full bg-[#1E2328]/10" />,
 };
 
 const markdownPlugins = [remarkGfm, remarkMath];
@@ -998,14 +1012,56 @@ function TechBlogsPage() {
 
 function NovelsPage() {
   return (
-    <section className="mx-auto max-w-7xl px-6 py-16 md:px-10 md:py-24">
-      <div className="mb-10">
+    <section className="mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-24">
+      <Link
+        to="/"
+        className="inline-block text-xs uppercase tracking-[0.28em] text-[#5BAEE6] transition-colors hover:text-[#1E7FBF]"
+      >
+        ← Home
+      </Link>
+
+      <div className="mt-6 mb-10 max-w-3xl">
         <div className="text-xs uppercase tracking-[0.28em] text-[#5BAEE6]">Novels</div>
-        <h2 className="mt-3 text-3xl font-semibold tracking-[-0.03em] md:text-5xl">Stories in the same atmosphere.</h2>
+        <h1 className="mt-3 text-3xl font-semibold text-[#1E2328] md:text-5xl">《未定义行为》</h1>
+        <p className="mt-4 text-base leading-8 text-[#3A4653]">
+          一部技术悬疑单元剧。每集一个系统事故，每个 bug 背后都有一次没有被定义的决定。霍珀修别人修不了的东西，林爱达在每周三下午四点问她无法绕开的那个问题。第一季每周三 16:00（中国时间）更新。
+        </p>
       </div>
-      <div className="rounded-[30px] border border-[#1E2328]/8 bg-white/58 p-8 shadow-[0_18px_60px_rgba(40,55,70,0.06)] backdrop-blur-sm">
-        <p className="text-center text-lg leading-8 text-[#3A4653] md:text-xl">to be published</p>
+
+      <div className="grid gap-6">
+        {novelDetails.map((novel) => (
+          <Link
+            key={novel.slug}
+            to={`/novels/${novel.slug}`}
+            className="group grid gap-6 rounded-[24px] border border-[#1E2328]/8 bg-white/62 p-5 shadow-[0_18px_60px_rgba(40,55,70,0.06)] backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:bg-white/78 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E7FBF]/45 md:grid-cols-[220px_minmax(0,1fr)] md:p-6"
+          >
+            <div className="overflow-hidden rounded-lg bg-[#111] shadow-[0_18px_48px_rgba(20,25,30,0.18)]">
+              <img
+                src={publicAsset(novel.seriesCover || novel.cover)}
+                alt={novel.series || novel.title}
+                loading="lazy"
+                className="aspect-[1038/1515] h-full w-full object-cover transition duration-500 group-hover:scale-[1.02]"
+              />
+            </div>
+            <div className="flex min-w-0 flex-col justify-center">
+              <div className="text-xs uppercase tracking-[0.24em] text-[#5BAEE6]">{novel.episode || 'Episode'}</div>
+              <h2 className="mt-3 text-2xl font-semibold text-[#1E2328] md:text-4xl">{novel.title}</h2>
+              {novel.meta ? <p className="mt-3 text-sm text-[#1E7FBF]">{novel.meta}</p> : null}
+              {novel.summary ? <p className="mt-5 max-w-2xl text-[15px] leading-8 text-[#3A4653]">{novel.summary}</p> : null}
+              <div className="mt-6 inline-flex items-center text-sm font-medium text-[#1E7FBF]">
+                Read episode
+                <span className="ml-2 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">→</span>
+              </div>
+            </div>
+          </Link>
+        ))}
       </div>
+
+      {novelDetails.length === 0 ? (
+        <div className="rounded-[24px] border border-[#1E2328]/8 bg-white/58 p-8 shadow-[0_18px_60px_rgba(40,55,70,0.06)] backdrop-blur-sm">
+          <p className="text-center text-lg leading-8 text-[#3A4653] md:text-xl">to be published</p>
+        </div>
+      ) : null}
     </section>
   );
 }
@@ -1118,6 +1174,61 @@ function AboutPage() {
             ))}
           </div>
         </div>
+      </div>
+    </section>
+  );
+}
+
+function NovelDetailPage() {
+  const { slug } = useParams();
+  const novel = slug ? getNovelBySlug(slug) : null;
+
+  if (!novel) {
+    return <Navigate to="/novels" replace />;
+  }
+
+  return (
+    <section className="mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-24">
+      <Link
+        to="/novels"
+        className="inline-block text-sm tracking-wide text-[#1E7FBF] transition-colors hover:text-[#0f5f96]"
+      >
+        ← Back to Novels
+      </Link>
+
+      <div className="mt-6 grid gap-8 lg:grid-cols-[290px_minmax(0,1fr)]">
+        <aside className="lg:sticky lg:top-8 lg:self-start">
+          <div className="overflow-hidden rounded-lg bg-[#111] shadow-[0_18px_56px_rgba(20,25,30,0.2)]">
+            <img
+              src={publicAsset(novel.cover || novel.seriesCover)}
+              alt={novel.title}
+              loading="eager"
+              className="aspect-[2/3] w-full object-cover"
+            />
+          </div>
+          <div className="mt-4 rounded-[18px] border border-[#1E2328]/8 bg-white/62 p-4 text-sm leading-7 text-[#3A4653] shadow-[0_12px_36px_rgba(40,55,70,0.05)] backdrop-blur-sm">
+            <div className="font-medium text-[#1E2328]">{novel.series}</div>
+            {novel.episode ? <div className="mt-1 text-[#1E7FBF]">{novel.episode}</div> : null}
+            {novel.date ? <time className="mt-1 block text-xs uppercase tracking-[0.18em] text-[#64748B]">{novel.date}</time> : null}
+          </div>
+        </aside>
+
+        <article className="min-w-0 rounded-[24px] border border-[#1E2328]/8 bg-white/72 p-6 shadow-[0_18px_60px_rgba(40,55,70,0.06)] backdrop-blur-sm md:p-9">
+          <div className="text-xs uppercase tracking-[0.28em] text-[#5BAEE6]">Novel</div>
+          <h1 className="mt-3 text-3xl font-semibold text-[#1E2328] md:text-5xl">{novel.title}</h1>
+          {novel.meta ? <p className="mt-3 text-sm text-[#1E7FBF]">{novel.meta}</p> : null}
+          {novel.summary ? <p className="mt-6 text-base leading-8 text-[#3A4653]">{novel.summary}</p> : null}
+
+          <div className="mt-8 border-t border-[#1E2328]/10 pt-8">
+            <ReactMarkdown
+              remarkPlugins={markdownPlugins}
+              rehypePlugins={markdownRehypePlugins}
+              components={novelMarkdownComponents}
+            >
+              {novel.content}
+            </ReactMarkdown>
+          </div>
+        </article>
       </div>
     </section>
   );
@@ -1410,6 +1521,7 @@ function PortfolioLayout() {
           />
           <Route path="/graphics-tutorials/:slug" element={<GraphicsTutorialDetailPage />} />
           <Route path="/novels" element={<NovelsPage />} />
+          <Route path="/novels/:slug" element={<NovelDetailPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="*" element={<HomePage />} />
         </Routes>
