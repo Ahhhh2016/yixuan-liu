@@ -268,10 +268,10 @@ const markdownComponents = {
   h1: ({ children }) => <h1 className="mt-8 text-3xl font-semibold tracking-[-0.03em] text-[#1E2328] md:text-4xl">{children}</h1>,
   h2: ({ children }) => <h2 className="mt-8 text-2xl font-semibold tracking-[-0.02em] text-[#1E2328] md:text-3xl">{children}</h2>,
   h3: ({ children }) => <h3 className="mt-6 text-xl font-semibold text-[#1E2328]">{children}</h3>,
-  p: ({ children }) => <p className="mt-4 text-base leading-8 text-[#3A4653]">{children}</p>,
+  p: ({ children }) => <p className="mt-4 whitespace-pre-line text-base leading-8 text-[#3A4653]">{children}</p>,
   ul: ({ children }) => <ul className="mt-4 list-disc space-y-2 pl-6 text-[#3A4653]">{children}</ul>,
   ol: ({ children }) => <ol className="mt-4 list-decimal space-y-2 pl-6 text-[#3A4653]">{children}</ol>,
-  li: ({ children }) => <li className="leading-8">{children}</li>,
+  li: ({ children }) => <li className="whitespace-pre-line leading-8">{children}</li>,
   strong: ({ children }) => <strong className="font-semibold text-[#1E2328]">{children}</strong>,
   code: ({ className, children }) => {
     const isBlock = typeof className === 'string' && /\blanguage-/.test(className);
@@ -326,7 +326,7 @@ const novelMarkdownComponents = {
   ...markdownComponents,
   h1: ({ children }) => <h1 className="mt-10 text-3xl font-semibold text-[#1E2328] md:text-4xl">{children}</h1>,
   h2: ({ children }) => <h2 className="mt-8 text-2xl font-semibold text-[#1E2328] md:text-3xl">{children}</h2>,
-  p: ({ children }) => <p className="mt-5 text-[17px] leading-9 text-[#283540] md:text-[18px]">{children}</p>,
+  p: ({ children }) => <p className="mt-5 whitespace-pre-line text-[17px] leading-9 text-[#283540] md:text-[18px]">{children}</p>,
   blockquote: ({ children }) => (
     <blockquote className="mt-6 border-l-2 border-[#1E7FBF]/35 bg-[#F4FAFE]/70 py-1 pl-5 text-[#3A4653]">
       {children}
@@ -561,7 +561,7 @@ function CommentsSection({ contentType, slug }) {
   return (
     <section className="mt-10 rounded-[24px] border border-[#1E2328]/8 bg-white/65 p-6 shadow-[0_12px_40px_rgba(40,55,70,0.05)]">
       <h2 className="text-xl font-semibold tracking-[-0.02em] text-[#1E2328]">评论</h2>
-      <p className="mt-2 text-sm text-[#3A4653]">支持评论与回复。输入邮箱即可发布，用户名全站唯一。</p>
+      <p className="mt-2 text-sm text-[#3A4653]">支持评论与回复。登录后即可发布，用户名全站唯一。</p>
 
       {!isSupabaseConfigured && (
         <div className="mt-5 rounded-xl border border-[#e0b7b7] bg-[#fff3f3] px-4 py-3 text-sm text-[#9a3f3f]">
