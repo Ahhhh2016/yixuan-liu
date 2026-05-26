@@ -1011,6 +1011,10 @@ function TechBlogsPage() {
 }
 
 function NovelsPage() {
+  const firstNovel = novelDetails[0];
+  const latestNovel = novelDetails[novelDetails.length - 1];
+  const bookCover = firstNovel?.seriesCover || firstNovel?.cover;
+
   return (
     <section className="mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-24">
       <Link
@@ -1022,47 +1026,54 @@ function NovelsPage() {
 
       <div className="mt-6 mb-10 max-w-3xl">
         <div className="text-xs uppercase tracking-[0.28em] text-[#5BAEE6]">Novels</div>
-        <h1 className="mt-3 text-3xl font-semibold text-[#1E2328] md:text-5xl">《未定义行为》</h1>
-        <p className="mt-4 text-base leading-8 text-[#3A4653]">
-          一部技术悬疑单元剧。每集一个系统事故，每个 bug 背后都有一次没有被定义的决定。
-          霍珀修别人修不了的东西，林爱达在每周三下午四点问她无法绕开的那个问题。第一季每周三 16:00（中国时间）更新。
-        </p>
       </div>
 
-      <div className="grid gap-6">
-        {novelDetails.map((novel) => (
+      {firstNovel ? (
+        <div className="grid gap-6">
           <Link
-            key={novel.slug}
-            to={`/novels/${novel.slug}`}
-            className="group grid gap-6 rounded-[24px] border border-[#1E2328]/8 bg-white/62 p-5 shadow-[0_18px_60px_rgba(40,55,70,0.06)] backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:bg-white/78 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E7FBF]/45 md:grid-cols-[220px_minmax(0,1fr)] md:p-6"
+            to="/novels/undefined-behavior"
+            className="group grid gap-8 rounded-[28px] border border-[#1E2328]/8 bg-white/64 p-6 shadow-[0_22px_70px_rgba(40,55,70,0.08)] backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:bg-white/82 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E7FBF]/45 md:grid-cols-[260px_minmax(0,1fr)] md:p-8"
           >
-            <div className="overflow-hidden rounded-lg bg-[#111] shadow-[0_18px_48px_rgba(20,25,30,0.18)]">
+            <div className="relative overflow-hidden rounded-lg bg-[#111] shadow-[0_22px_56px_rgba(20,25,30,0.2)]">
               <img
-                src={publicAsset(novel.seriesCover || novel.cover)}
-                alt={novel.series || novel.title}
+                src={publicAsset(bookCover)}
+                alt="Undefined Behavior / 未定义行为"
                 loading="lazy"
                 className="aspect-[1038/1515] h-full w-full object-cover transition duration-500 group-hover:scale-[1.02]"
               />
             </div>
             <div className="flex min-w-0 flex-col justify-center">
-              <div className="text-xs uppercase tracking-[0.24em] text-[#5BAEE6]">{novel.episode || 'Episode'}</div>
-              <h2 className="mt-3 text-2xl font-semibold text-[#1E2328] md:text-4xl">{novel.title}</h2>
-              {novel.meta ? <p className="mt-3 text-sm text-[#1E7FBF]">{novel.meta}</p> : null}
-              {novel.summary ? <p className="mt-5 max-w-2xl text-[15px] leading-8 text-[#3A4653]">{novel.summary}</p> : null}
-              <div className="mt-6 inline-flex items-center text-sm font-medium text-[#1E7FBF]">
-                Read episode
+              <div className="text-xs uppercase tracking-[0.24em] text-[#5BAEE6]">Book</div>
+              <h2 className="mt-3 text-3xl font-semibold text-[#1E2328] md:text-5xl">
+                Undefined Behavior
+                <span className="mt-1 block text-2xl md:text-4xl">未定义行为</span>
+              </h2>
+              <p className="mt-4 max-w-2xl text-base leading-8 text-[#3A4653]">
+                一部技术悬疑单元剧。每集一个系统事故，每个 bug 背后都有一次没有被定义的决定。
+              霍珀修别人修不了的东西，林爱达在每周三下午四点问她无法绕开的那个问题。第一季每周三 16:00（中国时间）更新。
+              </p>
+              <div className="mt-6 flex flex-wrap gap-2 text-sm">
+                <span className="rounded-md border border-[#1E2328]/10 bg-[#F8FAFC] px-3 py-1 text-[#3A4653]">
+                  {novelDetails.length} episodes
+                </span>
+                {latestNovel ? (
+                  <span className="rounded-md bg-[#EEF6FC] px-3 py-1 text-[#1E7FBF]">
+                    Latest: {latestNovel.episode} · {latestNovel.title.replace(/^Ep\d+\s*/, '')}
+                  </span>
+                ) : null}
+              </div>
+              <div className="mt-7 inline-flex items-center text-sm font-medium text-[#1E7FBF]">
+                Open book
                 <span className="ml-2 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">→</span>
               </div>
             </div>
           </Link>
-        ))}
-      </div>
-
-      {novelDetails.length === 0 ? (
+        </div>
+      ) : (
         <div className="rounded-[24px] border border-[#1E2328]/8 bg-white/58 p-8 shadow-[0_18px_60px_rgba(40,55,70,0.06)] backdrop-blur-sm">
           <p className="text-center text-lg leading-8 text-[#3A4653] md:text-xl">to be published</p>
         </div>
-      ) : null}
+      )}
     </section>
   );
 }
@@ -1183,6 +1194,7 @@ function AboutPage() {
 function NovelDetailPage() {
   const { slug } = useParams();
   const novel = slug ? getNovelBySlug(slug) : null;
+  const currentIndex = novel ? novelDetails.findIndex((item) => item.slug === novel.slug) : -1;
 
   if (!novel) {
     return <Navigate to="/novels" replace />;
@@ -1212,6 +1224,28 @@ function NovelDetailPage() {
             {novel.episode ? <div className="mt-1 text-[#1E7FBF]">{novel.episode}</div> : null}
             {novel.date ? <time className="mt-1 block text-xs uppercase tracking-[0.18em] text-[#64748B]">{novel.date}</time> : null}
           </div>
+          <nav className="mt-4 rounded-[18px] border border-[#1E2328]/8 bg-white/62 p-3 shadow-[0_12px_36px_rgba(40,55,70,0.05)] backdrop-blur-sm" aria-label="Episode list">
+            <div className="px-2 pb-2 text-xs uppercase tracking-[0.22em] text-[#5BAEE6]">Episodes</div>
+            <div className="space-y-1">
+              {novelDetails.map((episode) => {
+                const isCurrentEpisode = episode.slug === novel.slug;
+                return (
+                  <Link
+                    key={episode.slug}
+                    to={`/novels/${episode.slug}`}
+                    className={`block rounded-xl px-3 py-2.5 transition-colors ${
+                      isCurrentEpisode
+                        ? 'bg-[#E8F3FB] text-[#1E7FBF]'
+                        : 'text-[#3A4653] hover:bg-white/72 hover:text-[#1E7FBF]'
+                    }`}
+                  >
+                    <span className="block text-xs font-medium uppercase tracking-[0.16em]">{episode.episode}</span>
+                    <span className="mt-1 block text-sm leading-5 text-[#1E2328]">{episode.title.replace(/^Ep\d+\s*/, '')}</span>
+                  </Link>
+                );
+              })}
+            </div>
+          </nav>
         </aside>
 
         <article className="min-w-0 rounded-[24px] border border-[#1E2328]/8 bg-white/72 p-6 shadow-[0_18px_60px_rgba(40,55,70,0.06)] backdrop-blur-sm md:p-9">
@@ -1229,10 +1263,39 @@ function NovelDetailPage() {
               {novel.content}
             </ReactMarkdown>
           </div>
+
+          <div className="mt-12 flex flex-col gap-3 border-t border-[#1E2328]/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
+            {currentIndex > 0 ? (
+              <Link
+                to={`/novels/${novelDetails[currentIndex - 1].slug}`}
+                className="text-sm font-medium text-[#1E7FBF] transition hover:text-[#0f5f96]"
+              >
+                ← Previous: {novelDetails[currentIndex - 1].episode}
+              </Link>
+            ) : <span />}
+            {currentIndex >= 0 && currentIndex < novelDetails.length - 1 ? (
+              <Link
+                to={`/novels/${novelDetails[currentIndex + 1].slug}`}
+                className="text-sm font-medium text-[#1E7FBF] transition hover:text-[#0f5f96]"
+              >
+                Next: {novelDetails[currentIndex + 1].episode} →
+              </Link>
+            ) : null}
+          </div>
         </article>
       </div>
     </section>
   );
+}
+
+function NovelBookPage() {
+  const firstNovel = novelDetails[0];
+
+  if (!firstNovel) {
+    return <Navigate to="/novels" replace />;
+  }
+
+  return <Navigate to={`/novels/${firstNovel.slug}`} replace />;
 }
 
 function ProjectDetailPage() {
@@ -1522,6 +1585,7 @@ function PortfolioLayout() {
           />
           <Route path="/graphics-tutorials/:slug" element={<GraphicsTutorialDetailPage />} />
           <Route path="/novels" element={<NovelsPage />} />
+          <Route path="/novels/undefined-behavior" element={<NovelBookPage />} />
           <Route path="/novels/:slug" element={<NovelDetailPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="*" element={<HomePage />} />
