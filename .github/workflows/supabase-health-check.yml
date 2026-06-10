@@ -1,0 +1,32 @@
+name: Supabase Health Check
+
+on:
+  schedule:
+    - cron: '0 12 */3 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Query Supabase comments table
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          set -euo pipefail
+
+          KEY="${SUPABASE_PUBLISHABLE_KEY:-$SUPABASE_ANON_KEY}"
+          if [ -z "${SUPABASE_URL:-}" ] || [ -z "$KEY" ]; then
+            echo "::error::Set SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY (or SUPABASE_ANON_KEY) in repository secrets."
+            exit 1
+          fi
+
+          curl --fail --silent --show-error --max-time 20 \
+            -H "apikey: $KEY" \
+            -H "Authorization: Bearer $KEY" \
+            "$SUPABASE_URL/rest/v1/comments?select=id&limit=1"

@@ -70,6 +70,15 @@ cp blog-app/.env.example blog-app/.env
 
 未配置时站点仍可浏览，相关功能会处于不可用状态。
 
+### 低频健康检查
+
+仓库包含 `.github/workflows/supabase-health-check.yml`，会每 3 天查询一次 Supabase `comments` 表，降低 Free tier 因长期无活动被暂停的概率。使用前请在 GitHub 仓库 **Settings → Secrets and variables → Actions** 添加：
+
+- `SUPABASE_URL`
+- `SUPABASE_PUBLISHABLE_KEY`（或 `SUPABASE_ANON_KEY`）
+
+站点前端也会在真实访问时做一次本地限频健康检查，同一浏览器最多 3 天触发一次。
+
 ---
 
 ## 目录说明
