@@ -104,6 +104,14 @@ const graphics = [
 
 const ai = [
     {
+      title: "单词唤醒",
+      meta: "AI · Word Finder · Chinese-English Recall · GitHub Models",
+      desc: "An AI-powered word recall tool for those tip-of-the-tongue moments: enter a fuzzy Chinese meaning or a partial spelling, and get likely English words ranked by match score.",
+      href: "https://wakeaword.vercel.app/",
+      repo: "https://github.com/Ahhhh2016/wakeaword",
+      cover: publicAsset('/images/projects/wakeaword.png'),
+    },
+    {
       title: "MultiTranslator",
       meta: "DeepL · LibreTranslate · Web Speech API · Static + Serverless",
       desc: "A zero-dependency, single-file web translator: six languages via DeepL and LibreTranslate, optional Vercel proxy so API keys never ship to the client, and read-aloud through the browser’s Web Speech API. Open index.html locally or deploy to any static host.",
