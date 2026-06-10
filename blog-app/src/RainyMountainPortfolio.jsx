@@ -16,6 +16,7 @@ import { getTutorialBySlug, tutorialDetails } from './tutorialContent.js';
 import { getNovelBySlug, novelDetails } from './novelContent.js';
 import { createComment, createProfile, getProfile, listComments } from './commentApi.js';
 import { isSupabaseConfigured, supabase } from './supabaseClient.js';
+import { runSupabaseHealthCheck } from './supabaseHealthCheck.js';
 
 /** Root-relative public URLs respect Vite `base` (e.g. GitHub Pages project sites). */
 function publicAsset(path) {
@@ -1489,6 +1490,10 @@ function GraphicsTutorialDetailPage() {
 }
 
 function PortfolioLayout() {
+  useEffect(() => {
+    runSupabaseHealthCheck();
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#EEF6FD] text-[#1E2328] overflow-hidden selection:bg-[#5BAEE6]/25">
       <style>{`
