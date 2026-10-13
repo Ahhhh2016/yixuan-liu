@@ -72,7 +72,7 @@ To exit the application, you can simply close the application window. The result
 
 ### Video Stippling
 
-<img src="/images/projects/stippling/tiger.gif" width="400">
+<img src="/images/projects/stippling/tiger.webp" width="400">
 We haven't integrated video stippling on the master branch yet, but there are some helpful python scripts included in the [VideoStippling](./VideoStippling) folder.
 
 + `toframe.py` convert video to frames based on the fps of the original video.
@@ -167,7 +167,7 @@ Here is the result obtained after using our model to continuously perform the St
 
 ## Gallery
 
-<img src="/images/projects/stippling/book.gif" width="500">
+<img src="/images/projects/stippling/book.webp" width="500">
 
 <img src="/images/projects/stippling/monroe_with_ordering.png" width="200">    <img src="/images/projects/stippling/filling.jpg" width="400">
 
