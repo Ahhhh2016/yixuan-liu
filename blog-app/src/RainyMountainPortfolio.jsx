@@ -28,12 +28,77 @@ function publicAsset(path) {
   return `${base.replace(/\/$/, '')}${path}`;
 }
 
+const PRIMARY_DOMAIN = 'yixuanliu.dev';
+
+const sectionHosts = {
+  projects: `lab.${PRIMARY_DOMAIN}`,
+  techBlogs: `blog.${PRIMARY_DOMAIN}`,
+  graphics: `graphics.${PRIMARY_DOMAIN}`,
+  novels: `novels.${PRIMARY_DOMAIN}`,
+  about: `about.${PRIMARY_DOMAIN}`,
+};
+
+const sectionPaths = {
+  projects: '/projects',
+  techBlogs: '/tech-blogs',
+  graphics: '/graphics-tutorials',
+  novels: '/novels',
+  about: '/about',
+};
+
+function getCurrentHostname() {
+  return typeof window === 'undefined' ? '' : window.location.hostname;
+}
+
+function getCurrentProtocol() {
+  return typeof window === 'undefined' ? 'https:' : window.location.protocol;
+}
+
+function getSectionUrl(section) {
+  const host = sectionHosts[section];
+  const path = sectionPaths[section] ?? '/';
+  const currentHost = getCurrentHostname();
+
+  if (!host || currentHost === 'localhost' || currentHost === '127.0.0.1') {
+    return path;
+  }
+
+  return `${getCurrentProtocol()}//${host}/`;
+}
+
+function getHomeUrl() {
+  const currentHost = getCurrentHostname();
+
+  if (currentHost === 'localhost' || currentHost === '127.0.0.1') {
+    return '/';
+  }
+
+  return `${getCurrentProtocol()}//${PRIMARY_DOMAIN}/`;
+}
+
+function getHostSection() {
+  const currentHost = getCurrentHostname();
+  return Object.entries(sectionHosts).find(([, host]) => currentHost === host)?.[0] ?? null;
+}
+
+function HomeRoute() {
+  const section = getHostSection();
+
+  if (section === 'projects') return <ProjectsPage />;
+  if (section === 'techBlogs') return <TechBlogsPage />;
+  if (section === 'graphics') return <Navigate to={`/graphics-tutorials/${tutorials[0].slug}`} replace />;
+  if (section === 'novels') return <NovelsPage />;
+  if (section === 'about') return <AboutPage />;
+
+  return <HomePage />;
+}
+
 const nav = [
-  { label: 'Projects', path: '/projects' },
-  { label: 'Tech blogs', path: '/tech-blogs' },
-  { label: 'Graphics Tutorials', path: '/graphics-tutorials' },
-  { label: 'Novels', path: '/novels' },
-  { label: 'About', path: '/about' },
+  { label: 'Projects', section: 'projects' },
+  { label: 'Tech blogs', section: 'techBlogs' },
+  { label: 'Graphics Tutorials', section: 'graphics' },
+  { label: 'Novels', section: 'novels' },
+  { label: 'About', section: 'about' },
 ];
 
 const graphics = [
@@ -216,35 +281,35 @@ const asciiCardsRaw = [
     {
       key: 'computer',
       ascii: COMPUTER_ASCII,
-      href: '/projects',
+      href: getSectionUrl('projects'),
       title: 'Projects',
       subtitle: 'computer',
     },
     {
       key: 'notebook',
       ascii: NOTEBOOK_ASCII,
-      href: '/tech-blogs',
+      href: getSectionUrl('techBlogs'),
       title: 'Tech Blogs',
       subtitle: 'notebook',
     },
     {
       key: 'teapot',
       ascii: UTAH_TEAPOT_ASCII,
-      href: '/graphics-tutorials',
+      href: getSectionUrl('graphics'),
       title: 'Graphics Tutorials',
       subtitle: 'teapot',
     },
     {
       key: 'scroll',
       ascii: SCROLL_ASCII,
-      href: '/novels',
+      href: getSectionUrl('novels'),
       title: 'Novels',
       subtitle: 'scroll',
     },
     {
       key: 'phonograph',
       ascii: PHONOGRAPH_ASCII,
-      href: '/about',
+      href: getSectionUrl('about'),
       title: 'About',
       subtitle: 'phonograph',
     },
@@ -808,9 +873,9 @@ function HomePage() {
 
       <div className="mt-14 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
         {asciiCards.map((card) => (
-          <Link
+          <a
             key={card.key}
-            to={card.href}
+            href={card.href}
             aria-label={`Go to ${card.title}`}
             className="group relative min-w-0 overflow-hidden rounded-[24px] bg-transparent p-3 transition duration-300 hover:-translate-y-1 hover:bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E7FBF]/45 md:p-4"
           >
@@ -826,7 +891,7 @@ function HomePage() {
             <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
               <div className="px-4 py-2 text-sm font-semibold tracking-wide text-black">{card.title}</div>
             </div>
-          </Link>
+          </a>
         ))}
       </div>
     </section>
@@ -1558,8 +1623,8 @@ function PortfolioLayout() {
 
       <header className="relative z-10">
         <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6 md:px-10">
-          <Link
-            to="/"
+          <a
+            href={getHomeUrl()}
             className="inline-flex items-center gap-3 text-sm tracking-[0.25em] text-[#3A4653] uppercase transition-colors hover:text-[#1E2328]"
             aria-label="Yixuan Liu — home"
           >
@@ -1570,17 +1635,17 @@ function PortfolioLayout() {
               className="h-7 w-7 shrink-0 rounded-[6px] shadow-sm"
             />
             <span>Yixuan Liu</span>
-          </Link>
+          </a>
           <div className="hidden gap-8 md:flex">
             {nav.map((item) => (
-              <Link
+              <a
                 key={item.label}
-                to={item.path}
+                href={getSectionUrl(item.section)}
                 className="group relative text-sm text-[#3A4653] transition-colors hover:text-[#1E2328]"
               >
                 {item.label}
                 <span className="absolute -bottom-1 left-0 h-px w-0 bg-[#1E7FBF] transition-all duration-300 group-hover:w-full" />
-              </Link>
+              </a>
             ))}
           </div>
         </nav>
@@ -1588,7 +1653,7 @@ function PortfolioLayout() {
 
       <main className="relative z-10">
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<HomeRoute />} />
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/projects/:slug" element={<ProjectDetailPage />} />
           <Route path="/tech-blogs" element={<TechBlogsPage />} />
